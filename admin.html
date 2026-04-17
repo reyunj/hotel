@@ -465,6 +465,19 @@
             transition: all 0.3s ease;
         }
 
+        .action-btn:disabled {
+            background: #cbd5e1;
+            color: #64748b;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .action-btn:disabled:hover {
+            background: #cbd5e1;
+            transform: none;
+            box-shadow: none;
+        }
+
         .action-btn.checkin {
             background: var(--success);
             color: white;
@@ -1221,10 +1234,8 @@
             // Find booking for this specific room number
             const booking = bookings.find(b => {
                 if (!b.assignedRoom) return false;
-                const checkinDate = new Date(b.checkin);
-                const checkoutDate = new Date(b.checkout);
-                checkinDate.setHours(0, 0, 0, 0);
-                checkoutDate.setHours(0, 0, 0, 0);
+                const checkinDate = new Date(b.checkin + 'T00:00:00');
+                const checkoutDate = new Date(b.checkout + 'T00:00:00');
                 // Match if the room is currently occupied or booked for future
                 const matches = b.assignedRoom === roomNumber && (checkinDate <= today && today < checkoutDate || checkinDate > today);
                 if (matches) {
@@ -1234,14 +1245,15 @@
             });
 
             if (booking) {
-                const checkinDate = new Date(booking.checkin);
-                const checkoutDate = new Date(booking.checkout);
-                checkinDate.setHours(0, 0, 0, 0);
-                checkoutDate.setHours(0, 0, 0, 0);
+                const checkinDate = new Date(booking.checkin + 'T00:00:00');
+                const checkoutDate = new Date(booking.checkout + 'T00:00:00');
                 
                 const isOccupied = checkinDate <= today && today < checkoutDate;
                 const status = isOccupied ? 'occupied' : 'booked';
                 const statusText = isOccupied ? 'Occupied' : 'Booked';
+                
+                // Check if checkout date is today
+                const isCheckoutToday = checkoutDate.getTime() === today.getTime();
 
                 card.innerHTML = `
                     <div class="room-header">
@@ -1266,7 +1278,11 @@
                         </div>
                     </div>
                     <div class="room-actions">
-                        ${isOccupied ? `<button class="action-btn checkout" onclick="processCheckout('${booking.referenceNumber}')">Process Check-out</button>` : `<button class="action-btn" disabled>Upcoming Booking</button>`}
+                        ${isOccupied ? 
+                            (isCheckoutToday ? 
+                                `<button class="action-btn checkout" onclick="processCheckout('${booking.referenceNumber}')">Process Check-out</button>` : 
+                                `<button class="action-btn checkout" disabled>Check-out: ${formatDate(booking.checkout)}</button>`) 
+                            : `<button class="action-btn" disabled>Upcoming Booking</button>`}
                     </div>
                 `;
             } else {
