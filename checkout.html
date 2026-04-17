@@ -764,57 +764,74 @@
                 </div>
 
                 <form id="paymentForm">
-                    <div class="form-group">
-                        <label for="cardName">Cardholder Name</label>
-                        <input type="text" id="cardName" required placeholder="Name on card">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="cardNumber">Card Number</label>
-                        <input type="text" id="cardNumber" required placeholder="1234 5678 9012 3456" maxlength="19">
-                    </div>
-
-                    <div class="form-row">
+                    <!-- Card Payment Fields (Visa/Mastercard) -->
+                    <div id="cardPaymentFields">
                         <div class="form-group">
-                            <label for="expiry">Expiry Date</label>
-                            <input type="text" id="expiry" required placeholder="MM/YY" maxlength="5">
+                            <label for="cardName">Cardholder Name</label>
+                            <input type="text" id="cardName" required placeholder="Name on card">
                         </div>
+
                         <div class="form-group">
-                            <label for="cvv">CVV</label>
-                            <input type="text" id="cvv" required placeholder="123" maxlength="4">
+                            <label for="cardNumber">Card Number</label>
+                            <input type="text" id="cardNumber" required placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expiry">Expiry Date</label>
+                                <input type="text" id="expiry" required placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" required placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+
+                        <h2 class="section-title">Billing Address</h2>
+
+                        <div class="form-group">
+                            <label for="address">Street Address</label>
+                            <input type="text" id="address" required placeholder="Your address">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" required placeholder="City">
+                            </div>
+                            <div class="form-group">
+                                <label for="zip">ZIP Code</label>
+                                <input type="text" id="zip" required placeholder="ZIP Code">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <select id="country" required>
+                                <option value="">Select country</option>
+                                <option value="PH">Philippines</option>
+                                <option value="US">United States</option>
+                                <option value="GB">United Kingdom</option>
+                                <option value="AU">Australia</option>
+                                <option value="CA">Canada</option>
+                                <option value="JP">Japan</option>
+                                <option value="SG">Singapore</option>
+                            </select>
                         </div>
                     </div>
 
-                    <h2 class="section-title">Billing Address</h2>
-
-                    <div class="form-group">
-                        <label for="address">Street Address</label>
-                        <input type="text" id="address" required placeholder="Your address">
-                    </div>
-
-                    <div class="form-row">
+                    <!-- E-wallet Payment Fields (Maya/GrabPay/ShopeePay) -->
+                    <div id="ewalletPaymentFields" style="display: none;">
+                        <h2 class="section-title">Account Information</h2>
                         <div class="form-group">
-                            <label for="city">City</label>
-                            <input type="text" id="city" required placeholder="City">
+                            <label for="mobileNumber">Mobile Number</label>
+                            <input type="tel" id="mobileNumber" required placeholder="09XX XXX XXXX" maxlength="13" pattern="[0-9\s]*">
                         </div>
-                        <div class="form-group">
-                            <label for="zip">ZIP Code</label>
-                            <input type="text" id="zip" required placeholder="ZIP Code">
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="country">Country</label>
-                        <select id="country" required>
-                            <option value="">Select country</option>
-                            <option value="PH">Philippines</option>
-                            <option value="US">United States</option>
-                            <option value="GB">United Kingdom</option>
-                            <option value="AU">Australia</option>
-                            <option value="CA">Canada</option>
-                            <option value="JP">Japan</option>
-                            <option value="SG">Singapore</option>
-                        </select>
+                        <div class="form-group">
+                            <label for="emailAddress">Email Address (Optional)</label>
+                            <input type="email" id="emailAddress" placeholder="your@email.com">
+                        </div>
                     </div>
                 </form>
             </div>
@@ -892,7 +909,7 @@
                 // Update order summary with booking data
                 const roomTypeMap = {
                     'standard': 'Standard Room',
-                    'deluxe': 'Deluxe Room', 
+                    'deluxe': 'Deluxe Room',
                     'suite': 'Luxury Suite',
                     'cottage': 'Beachfront Cottage',
                     'dorm': 'Shared Dorm'
@@ -910,7 +927,7 @@
                 const checkin = new Date(bookingData.checkin);
                 const checkout = new Date(bookingData.checkout);
                 const nights = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
-                
+
                 const roomRate = roomPriceMap[bookingData.roomType] || 0;
                 const subtotal = roomRate * nights;
                 const serviceFee = 500;
@@ -929,6 +946,12 @@
                 // Pre-fill cardholder name
                 document.getElementById('cardName').value = bookingData.fullName || '';
             }
+
+            // Initialize payment method selection (Visa is selected by default)
+            const defaultPaymentMethod = document.querySelector('.payment-method.selected');
+            if (defaultPaymentMethod) {
+                selectPaymentMethod(defaultPaymentMethod);
+            }
         };
 
         function selectPaymentMethod(element) {
@@ -936,6 +959,52 @@
                 method.classList.remove('selected');
             });
             element.classList.add('selected');
+
+            const paymentMethod = element.querySelector('span').textContent.toLowerCase();
+            const cardFields = document.getElementById('cardPaymentFields');
+            const ewalletFields = document.getElementById('ewalletPaymentFields');
+
+            // Card payments: Visa, Mastercard
+            if (paymentMethod === 'visa' || paymentMethod === 'mastercard') {
+                cardFields.style.display = 'block';
+                ewalletFields.style.display = 'none';
+                
+                // Make card fields required
+                document.getElementById('cardName').required = true;
+                document.getElementById('cardNumber').required = true;
+                document.getElementById('expiry').required = true;
+                document.getElementById('cvv').required = true;
+                document.getElementById('address').required = true;
+                document.getElementById('city').required = true;
+                document.getElementById('zip').required = true;
+                document.getElementById('country').required = true;
+                
+                // Make e-wallet fields not required
+                document.getElementById('mobileNumber').required = false;
+            }
+            // E-wallet payments: Maya, GrabPay, ShopeePay
+            else if (paymentMethod === 'maya' || paymentMethod === 'grabpay' || paymentMethod === 'shopeepay') {
+                cardFields.style.display = 'none';
+                ewalletFields.style.display = 'block';
+                
+                // Make card fields not required
+                document.getElementById('cardName').required = false;
+                document.getElementById('cardNumber').required = false;
+                document.getElementById('expiry').required = false;
+                document.getElementById('cvv').required = false;
+                document.getElementById('address').required = false;
+                document.getElementById('city').required = false;
+                document.getElementById('zip').required = false;
+                document.getElementById('country').required = false;
+                
+                // Make mobile number required, email optional
+                document.getElementById('mobileNumber').required = true;
+            }
+            // GCash - can use either form
+            else {
+                cardFields.style.display = 'block';
+                ewalletFields.style.display = 'block';
+            }
         }
 
         function processPayment() {
@@ -979,6 +1048,25 @@
             let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
             let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
             e.target.value = formattedValue;
+        });
+
+        // Format mobile number for Philippine format
+        document.getElementById('mobileNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+            // Limit to 11 digits for Philippine numbers
+            if (value.length > 11) {
+                value = value.slice(0, 11);
+            }
+            // Format as 09XX XXX XXXX
+            if (value.length >= 4) {
+                let formatted = value.slice(0, 4) + ' ' + value.slice(4);
+                if (value.length >= 7) {
+                    formatted = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7);
+                }
+                e.target.value = formatted;
+            } else {
+                e.target.value = value;
+            }
         });
 
         // Format expiry date
