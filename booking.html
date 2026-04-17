@@ -241,6 +241,29 @@
             background: #fafbfc;
         }
 
+        input[type="date"] {
+            cursor: pointer;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+
+        input[type="date"]::-moz-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0.6;
+        }
+
+        input[type="date"]::-moz-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--primary);
@@ -352,7 +375,7 @@
         <div class="form-container">
             <form onsubmit="handleSubmit(event)">
                 <div class="form-row">
-                    <div>
+                    <div class="form-group">
                         <label for="fullName">Full Name</label>
                         <input type="text" id="fullName" placeholder="Your name" required>
                     </div>
