@@ -1070,11 +1070,43 @@
             // Update guest chart with last 7 days data
             const guestData = [];
             const labels = [];
-            for (let i = 6; i >= 0; i--) {
-                const date = new Date(today);
-                date.setDate(date.getDate() - i);
-                const dateStr = date.toISOString().split('T')[0];
-                labels.push(i === 0 ? 'Today' : i === 1 ? 'Yesterday' : `${i} Days Ago`);
+            
+            // Get date range from bookings to show actual guest presence
+            const allDates = [];
+            bookings.forEach(booking => {
+                const checkinDate = new Date(booking.checkin);
+                const checkoutDate = new Date(booking.checkout);
+                checkinDate.setHours(0, 0, 0, 0);
+                checkoutDate.setHours(0, 0, 0, 0);
+                
+                // Add all dates from checkin to checkout
+                const currentDate = new Date(checkinDate);
+                while (currentDate < checkoutDate) {
+                    allDates.push(new Date(currentDate));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+            });
+
+            // Sort dates and get last 7 unique dates
+            const uniqueDates = [...new Set(allDates.map(d => d.toISOString().split('T')[0]))];
+            uniqueDates.sort();
+            const last7Days = uniqueDates.slice(-7);
+
+            // If no bookings, show last 7 calendar days
+            const datesToShow = last7Days.length > 0 ? last7Days : [];
+            if (datesToShow.length === 0) {
+                for (let i = 6; i >= 0; i--) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    datesToShow.push(date.toISOString().split('T')[0]);
+                }
+            }
+
+            datesToShow.forEach((dateStr, index) => {
+                const date = new Date(dateStr);
+                const isToday = date.toISOString().split('T')[0] === today.toISOString().split('T')[0];
+                const isYesterday = date.toISOString().split('T')[0] === new Date(today.getTime() - 86400000).toISOString().split('T')[0];
+                labels.push(isToday ? 'Today' : isYesterday ? 'Yesterday' : date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
 
                 let dayGuests = 0;
                 bookings.forEach(booking => {
@@ -1085,11 +1117,17 @@
                     const checkDate = new Date(dateStr);
 
                     if (checkinDate <= checkDate && checkDate < checkoutDate) {
-                        dayGuests += parseInt(booking.guests);
+                        const guestCount = parseInt(booking.guests) || 0;
+                        dayGuests += guestCount;
+                        console.log(`Day ${dateStr}: Adding ${guestCount} guests from booking ${booking.referenceNumber}`);
                     }
                 });
                 guestData.push(dayGuests);
-            }
+                console.log(`Day ${dateStr}: Total guests = ${dayGuests}`);
+            });
+
+            console.log('Guest chart data:', guestData);
+            console.log('Guest chart labels:', labels);
 
             if (window.guestChartInstance) {
                 window.guestChartInstance.data.labels = labels;
