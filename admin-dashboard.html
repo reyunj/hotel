@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Tagboanan Beach Resort</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0ea5e9;
+            --secondary: #0284c7;
+            --accent: #f97316;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --cream: #faf8f5;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: var(--cream);
+            min-height: 100vh;
+        }
+
+        nav {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 3rem;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: white;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .nav-link {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-actions a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-actions a:hover {
+            color: var(--primary);
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: var(--danger);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+            z-index: 1002;
+            padding: 10px;
+            margin-left: 1rem;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 4px;
+            background: var(--text-dark);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 2rem;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .mobile-menu a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--primary);
+        }
+
+        .person-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .person-icon:hover {
+            background: var(--secondary);
+        }
+
+        .logout-btn {
+            padding: 8px 20px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+        .dashboard {
+            padding: 8rem 3rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .stat-card.occupied {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border: 1px solid #86efac;
+        }
+
+        .stat-card.occupied .value {
+            color: #166534;
+        }
+
+        .stat-card.available {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 1px solid #93c5fd;
+        }
+
+        .stat-card.available .value {
+            color: #075985;
+        }
+
+        .stat-card.checkin {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #fcd34d;
+        }
+
+        .stat-card.checkin .value {
+            color: #92400e;
+        }
+
+        .stat-card.total {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            border: 1px solid #a5b4fc;
+        }
+
+        .stat-card.total .value {
+            color: #4338ca;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: var(--text-dark);
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .room-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .room-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .room-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .room-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .room-type {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .room-body {
+            padding: 1.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge.occupied {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-badge.available {
+            background: #dbeafe;
+            color: #075985;
+        }
+
+        .status-badge.maintenance {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .guest-info {
+            margin-bottom: 1rem;
+        }
+
+        .guest-info p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .guest-info strong {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .dates-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .date-item {
+            font-size: 0.8rem;
+        }
+
+        .date-item label {
+            display: block;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .date-item span {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .room-actions {
+            padding: 1rem 1.5rem;
+            background: #f8fafc;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn.checkin {
+            background: var(--success);
+            color: white;
+        }
+
+        .action-btn.checkin:hover {
+            background: #059669;
+        }
+
+        .action-btn.checkout {
+            background: var(--warning);
+            color: white;
+        }
+
+        .action-btn.checkout:hover {
+            background: #d97706;
+        }
+
+        .action-btn.maintenance {
+            background: var(--danger);
+            color: white;
+        }
+
+        .action-btn.maintenance:hover {
+            background: #dc2626;
+        }
+
+        .recent-activity {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .activity-list {
+            margin-top: 1.5rem;
+        }
+
+        .activity-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-info p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .charts-section {
+            margin-bottom: 3rem;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .chart-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                display: none;
+            }
+
+            .nav-actions span {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex !important;
+                margin-left: 0;
+            }
+
+            .nav-container {
+                padding: 0 1.5rem;
+            }
+
+            .rooms-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .rooms-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="admin-dashboard.html" class="logo">Tagboananan Admin</a>
+            <div class="nav-buttons">
+                <a href="admin-dashboard.html" class="nav-btn active">Dashboard</a>
+                <a href="inventory.html" class="nav-btn">Inventory</a>
+            </div>
+            <div class="nav-actions">
+                <span>👤 Admin</span>
+                <a href="index.html" onclick="handleLogout(event)" class="logout-btn">Logout</a>
+            </div>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="admin-dashboard.html" onclick="toggleMobileMenu()" class="active">Dashboard</a></li>
+            <li><a href="inventory.html" onclick="toggleMobileMenu()">Inventory</a></li>
+            <li><a href="index.html" onclick="handleLogout(event)">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="dashboard">
+        <div class="header">
+            <h1>Admin Dashboard</h1>
+            <p>Manage room occupancy and guest check-ins</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card occupied">
+                <h3>Occupied</h3>
+                <div class="value">12</div>
+            </div>
+            <div class="stat-card available">
+                <h3>Available</h3>
+                <div class="value">8</div>
+            </div>
+            <div class="stat-card checkin">
+                <h3>Check-ins Today</h3>
+                <div class="value">3</div>
+            </div>
+            <div class="stat-card">
+                <h3>Check-outs Today</h3>
+                <div class="value">2</div>
+            </div>
+            <div class="stat-card total">
+                <h3>Total Guests</h3>
+                <div class="value">35</div>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <h2>Guest Statistics</h2>
+        </div>
+
+        <div class="charts-section">
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Daily Guest Count</h3>
+                    <div class="chart-container">
+                        <canvas id="guestChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Room Occupancy Rate</h3>
+                    <div class="chart-container">
+                        <canvas id="occupancyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <h2>Room Overview</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Occupied</button>
+                <button class="filter-btn">Available</button>
+                <button class="filter-btn">Maintenance</button>
+            </div>
+        </div>
+
+        <div class="rooms-grid">
+            <div class="room-card">
+                <div class="room-header">
+                    <h3>Suite 101</h3>
+                    <div class="room-type">Luxury Suite</div>
+                </div>
+                <div class="room-body">
+                    <span class="status-badge occupied">Occupied</span>
+                    <div class="guest-info">
+                        <p><strong>Guest:</strong> Maria Santos</p>
+                        <p><strong>Contact:</strong> +63 912 345 6789</p>
+                    </div>
+                    <div class="dates-info">
+                        <div class="date-item">
+                            <label>Check-in</label>
+                            <span>Apr 12, 2026</span>
+                        </div>
+                        <div class="date-item">
+                            <label>Check-out</label>
+                            <span>Apr 15, 2026</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="room-actions">
+                    <button class="action-btn checkout">Process Check-out</button>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-header">
+                    <h3>Suite 102</h3>
+                    <div class="room-type">Luxury Suite</div>
+                </div>
+                <div class="room-body">
+                    <span class="status-badge occupied">Occupied</span>
+                    <div class="guest-info">
+                        <p><strong>Guest:</strong> John Rivera</p>
+                        <p><strong>Contact:</strong> +63 917 234 5678</p>
+                    </div>
+                    <div class="dates-info">
+                        <div class="date-item">
+                            <label>Check-in</label>
+                            <span>Apr 13, 2026</span>
+                        </div>
+                        <div class="date-item">
+                            <label>Check-out</label>
+                            <span>Apr 16, 2026</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="room-actions">
+                    <button class="action-btn checkout">Process Check-out</button>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-header">
+                    <h3>Deluxe 201</h3>
+                    <div class="room-type">Deluxe Room</div>
+                </div>
+                <div class="room-body">
+                    <span class="status-badge occupied">Occupied</span>
+                    <div class="guest-info">
+                        <p><strong>Guest:</strong> Lily Mendoza</p>
+                        <p><strong>Contact:</strong> +63 923 456 7890</p>
+                    </div>
+                    <div class="dates-info">
+                        <div class="date-item">
+                            <label>Check-in</label>
+                            <span>Apr 14, 2026</span>
+                        </div>
+                        <div class="date-item">
+                            <label>Check-out</label>
+                            <span>Apr 17, 2026</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="room-actions">
+                    <button class="action-btn checkout">Process Check-out</button>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-header">
+                    <h3>Standard 301</h3>
+                    <div class="room-type">Standard Room</div>
+                </div>
+                <div class="room-body">
+                    <span class="status-badge available">Available</span>
+                    <div class="guest-info">
+                        <p><strong>Status:</strong> Ready for check-in</p>
+                        <p><strong>Rate:</strong> ₱2,500/night</p>
+                    </div>
+                </div>
+                <div class="room-actions">
+                    <button class="action-btn checkin">Check-in Guest</button>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-header">
+                    <h3>Standard 302</h3>
+                    <div class="room-type">Standard Room</div>
+                </div>
+                <div class="room-body">
+                    <span class="status-badge available">Available</span>
+                    <div class="guest-info">
+                        <p><strong>Status:</strong> Ready for check-in</p>
+                        <p><strong>Rate:</strong> ₱2,500/night</p>
+                    </div>
+                </div>
+                <div class="room-actions">
+                    <button class="action-btn checkin">Check-in Guest</button>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-header">
+                    <h3>Dorm 401</h3>
+                    <div class="room-type">Shared Dorm</div>
+                </div>
+                <div class="room-body">
+                    <span class="status-badge occupied">Occupied</span>
+                    <div class="guest-info">
+                        <p><strong>Guests:</strong> 4/6 beds</p>
+                        <p><strong>Contact:</strong> +63 928 345 6789</p>
+                    </div>
+                    <div class="dates-info">
+                        <div class="date-item">
+                            <label>Check-in</label>
+                            <span>Apr 14, 2026</span>
+                        </div>
+                        <div class="date-item">
+                            <label>Check-out</label>
+                            <span>Apr 16, 2026</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="room-actions">
+                    <button class="action-btn checkout">Process Check-out</button>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-header">
+                    <h3>Suite 103</h3>
+                    <div class="room-type">Luxury Suite</div>
+                </div>
+                <div class="room-body">
+                    <span class="status-badge maintenance">Maintenance</span>
+                    <div class="guest-info">
+                        <p><strong>Status:</strong> Under renovation</p>
+                        <p><strong>Expected Ready:</strong> Apr 20, 2026</p>
+                    </div>
+                </div>
+                <div class="room-actions">
+                    <button class="action-btn maintenance">Update Status</button>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-header">
+                    <h3>Deluxe 202</h3>
+                    <div class="room-type">Deluxe Room</div>
+                </div>
+                <div class="room-body">
+                    <span class="status-badge available">Available</span>
+                    <div class="guest-info">
+                        <p><strong>Status:</strong> Ready for check-in</p>
+                        <p><strong>Rate:</strong> ₱3,500/night</p>
+                    </div>
+                </div>
+                <div class="room-actions">
+                    <button class="action-btn checkin">Check-in Guest</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <h2>Recent Activity</h2>
+        </div>
+
+        <div class="recent-activity">
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-info">
+                        <h4>Check-in: Maria Santos</h4>
+                        <p>Suite 101 - Luxury Suite</p>
+                    </div>
+                    <div class="activity-time">2 hours ago</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-info">
+                        <h4>Check-out: Carlos Garcia</h4>
+                        <p>Deluxe 203 - Deluxe Room</p>
+                    </div>
+                    <div class="activity-time">5 hours ago</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-info">
+                        <h4>Room Cleaned: Standard 301</h4>
+                        <p>Maintenance completed</p>
+                    </div>
+                    <div class="activity-time">8 hours ago</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-info">
+                        <h4>Check-in: John Rivera</h4>
+                        <p>Suite 102 - Luxury Suite</p>
+                    </div>
+                    <div class="activity-time">Yesterday</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Logout function
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Guest Statistics Chart
+        const guestCtx = document.getElementById('guestChart').getContext('2d');
+        new Chart(guestCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Today', 'Yesterday', '2 Days Ago', '3 Days Ago', '4 Days Ago', '5 Days Ago', '6 Days Ago'],
+                datasets: [{
+                    label: 'Guest Count',
+                    data: [35, 28, 32, 25, 30, 22, 27],
+                    backgroundColor: [
+                        'rgba(14, 165, 233, 0.8)',
+                        'rgba(14, 165, 233, 0.6)',
+                        'rgba(14, 165, 233, 0.6)',
+                        'rgba(14, 165, 233, 0.6)',
+                        'rgba(14, 165, 233, 0.6)',
+                        'rgba(14, 165, 233, 0.6)',
+                        'rgba(14, 165, 233, 0.6)'
+                    ],
+                    borderColor: '#0ea5e9',
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#f1f5f9'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Occupancy Rate Chart
+        const occupancyCtx = document.getElementById('occupancyChart').getContext('2d');
+        new Chart(occupancyCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Occupied', 'Available', 'Maintenance'],
+                datasets: [{
+                    data: [12, 8, 2],
+                    backgroundColor: [
+                        '#10b981',
+                        '#0ea5e9',
+                        '#f59e0b'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const filter = this.textContent.toLowerCase();
+                const roomCards = document.querySelectorAll('.room-card');
+
+                roomCards.forEach(card => {
+                    const statusBadge = card.querySelector('.status-badge');
+                    const status = statusBadge.textContent.toLowerCase();
+
+                    if (filter === 'all') {
+                        card.style.display = 'block';
+                    } else if (status.includes(filter)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Action button handlers
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.classList.contains('checkin') ? 'Check-in' : 
+                              this.classList.contains('checkout') ? 'Check-out' : 'Update';
+                alert(`${action} functionality would be implemented here`);
+            });
+        });
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const hamburger = document.querySelector('.hamburger');
+            mobileMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
