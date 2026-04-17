@@ -407,6 +407,83 @@
     </footer>
 
     <script>
+        // Set minimum dates for date inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            const checkinInput = document.getElementById('checkin');
+            const checkoutInput = document.getElementById('checkout');
+
+            checkinInput.setAttribute('min', today);
+            checkoutInput.setAttribute('min', today);
+
+            // Mobile datepicker fixes
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                // Handle mobile date input blur/focus issues
+                checkinInput.addEventListener('blur', function() {
+                    setTimeout(() => {
+                        this.blur();
+                    }, 100);
+                });
+
+                checkoutInput.addEventListener('blur', function() {
+                    setTimeout(() => {
+                        this.blur();
+                    }, 100);
+                });
+
+                // Prevent zoom on iOS
+                checkinInput.addEventListener('touchstart', function() {
+                    this.style.fontSize = '16px';
+                });
+
+                checkoutInput.addEventListener('touchstart', function() {
+                    this.style.fontSize = '16px';
+                });
+            }
+
+            // Update checkout min date when checkin changes
+            checkinInput.addEventListener('change', function() {
+                const checkinDate = new Date(this.value);
+                const nextDay = new Date(checkinDate);
+                nextDay.setDate(nextDay.getDate() + 1);
+                checkoutInput.setAttribute('min', nextDay.toISOString().split('T')[0]);
+
+                // If checkout is before new checkin, reset it
+                if (checkoutInput.value && new Date(checkoutInput.value) <= checkinDate) {
+                    checkoutInput.value = nextDay.toISOString().split('T')[0];
+                }
+
+                // On mobile, blur the input after selection
+                if (isMobile) {
+                    setTimeout(() => {
+                        this.blur();
+                        checkoutInput.focus();
+                        setTimeout(() => checkoutInput.blur(), 100);
+                    }, 300);
+                }
+            });
+
+            // Ensure checkout is after checkin
+            checkoutInput.addEventListener('change', function() {
+                const checkinDate = new Date(checkinInput.value);
+                const checkoutDate = new Date(this.value);
+
+                if (checkoutDate <= checkinDate) {
+                    alert('Check-out date must be after check-in date');
+                    this.value = '';
+                }
+
+                // On mobile, blur the input after selection
+                if (isMobile) {
+                    setTimeout(() => {
+                        this.blur();
+                    }, 300);
+                }
+            });
+        });
+
         function handleSubmit(event) {
             event.preventDefault();
             // Store booking data (in a real app, this would be sent to a server)
