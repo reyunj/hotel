@@ -905,6 +905,8 @@
         // Load booking data and update order summary
         window.onload = function() {
             const bookingData = JSON.parse(sessionStorage.getItem('bookingData'));
+            console.log('Checkout page loaded. Booking data from sessionStorage:', bookingData);
+
             if (bookingData) {
                 // Update order summary with booking data
                 const roomTypeMap = {
@@ -933,6 +935,8 @@
                 const serviceFee = 500;
                 const total = subtotal + serviceFee;
 
+                console.log('Calculated totals - Nights:', nights, 'Subtotal:', subtotal, 'Total:', total);
+
                 // Update summary items
                 document.querySelector('.summary-item:nth-child(1) .value').textContent = roomTypeMap[bookingData.roomType] || 'Standard Room';
                 document.querySelector('.summary-item:nth-child(2) .value').textContent = bookingData.checkin;
@@ -945,6 +949,8 @@
 
                 // Pre-fill cardholder name
                 document.getElementById('cardName').value = bookingData.fullName || '';
+            } else {
+                console.log('No booking data found in sessionStorage');
             }
 
             // Initialize payment method selection (Visa is selected by default)
@@ -982,11 +988,11 @@
                 // Make e-wallet fields not required
                 document.getElementById('mobileNumber').required = false;
             }
-            // E-wallet payments: Maya, GrabPay, ShopeePay
-            else if (paymentMethod === 'maya' || paymentMethod === 'grabpay' || paymentMethod === 'shopeepay') {
+            // E-wallet payments: Maya, GrabPay, ShopeePay, GCash
+            else if (paymentMethod === 'maya' || paymentMethod === 'grabpay' || paymentMethod === 'shopeepay' || paymentMethod === 'gcash') {
                 cardFields.style.display = 'none';
                 ewalletFields.style.display = 'block';
-                
+
                 // Make card fields not required
                 document.getElementById('cardName').required = false;
                 document.getElementById('cardNumber').required = false;
@@ -996,32 +1002,100 @@
                 document.getElementById('city').required = false;
                 document.getElementById('zip').required = false;
                 document.getElementById('country').required = false;
-                
+
                 // Make mobile number required, email optional
                 document.getElementById('mobileNumber').required = true;
-            }
-            // GCash - can use either form
-            else {
-                cardFields.style.display = 'block';
-                ewalletFields.style.display = 'block';
             }
         }
 
         function processPayment() {
             const form = document.getElementById('paymentForm');
             if (form.checkValidity()) {
+                // Get booking data from session storage
+                const bookingData = JSON.parse(sessionStorage.getItem('bookingData'));
+                const paymentMethod = document.querySelector('.payment-method.selected span').textContent;
+
+                console.log('Booking data from session:', bookingData);
+
+                // Assign a specific room number based on room type
+                const roomNumber = assignRoomNumber(bookingData.roomType);
+
+                // Create complete booking record
+                const completeBooking = {
+                    ...bookingData,
+                    paymentMethod: paymentMethod,
+                    referenceNumber: 'TBR-' + Date.now().toString().slice(-8),
+                    status: 'confirmed',
+                    bookingDate: new Date().toISOString(),
+                    assignedRoom: roomNumber,
+                    paymentDetails: {
+                        mobileNumber: document.getElementById('mobileNumber')?.value || '',
+                        emailAddress: document.getElementById('emailAddress')?.value || '',
+                        cardName: document.getElementById('cardName')?.value || '',
+                        cardNumber: document.getElementById('cardNumber')?.value || ''
+                    }
+                };
+
+                console.log('Complete booking:', completeBooking);
+
+                // Save to localStorage for admin dashboard
+                let existingBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+                existingBookings.push(completeBooking);
+                localStorage.setItem('bookings', JSON.stringify(existingBookings));
+
+                console.log('Saved to localStorage. Total bookings:', existingBookings.length);
+
                 // Generate random reference number
-                const refNumber = 'TBR-' + Date.now().toString().slice(-8);
+                const refNumber = completeBooking.referenceNumber;
                 document.getElementById('refNumber').textContent = refNumber;
-                
+
                 // Show success modal
                 document.getElementById('successModal').classList.add('active');
-                
+
                 // Clear booking data from session storage
                 sessionStorage.removeItem('bookingData');
             } else {
                 form.reportValidity();
             }
+        }
+
+        // Assign a specific room number based on room type and existing bookings
+        function assignRoomNumber(roomType) {
+            const existingBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Get all bookings for this room type that are currently active or future
+            const typeBookings = existingBookings.filter(b => {
+                const checkinDate = new Date(b.checkin);
+                const checkoutDate = new Date(b.checkout);
+                checkinDate.setHours(0, 0, 0, 0);
+                checkoutDate.setHours(0, 0, 0, 0);
+                return b.roomType === roomType && (checkoutDate > today);
+            });
+
+            // Room prefixes
+            const prefixes = {
+                'standard': 'STD',
+                'deluxe': 'DLX',
+                'suite': 'SUI',
+                'cottage': 'COT',
+                'dorm': 'DOR'
+            };
+
+            const prefix = prefixes[roomType] || 'STD';
+            const assignedRooms = typeBookings.map(b => b.assignedRoom);
+
+            // Find the next available room number (sequential per room type)
+            for (let i = 1; i <= 5; i++) {
+                const roomNumber = `${prefix}-${i}`;
+                if (!assignedRooms.includes(roomNumber)) {
+                    return roomNumber;
+                }
+            }
+
+            // If all rooms are booked, return the first one (shouldn't happen with proper validation)
+            return `${prefix}-1`;
         }
 
         function closeModal() {

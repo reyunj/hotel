@@ -406,6 +406,11 @@
             color: #92400e;
         }
 
+        .status-badge.booked {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
         .guest-info {
             margin-bottom: 1rem;
         }
@@ -866,23 +871,23 @@
         <div class="stats-grid">
             <div class="stat-card occupied">
                 <h3>Occupied</h3>
-                <div class="value">12</div>
+                <div class="value">0</div>
             </div>
             <div class="stat-card available">
                 <h3>Available</h3>
-                <div class="value">8</div>
+                <div class="value">23</div>
             </div>
             <div class="stat-card checkin">
                 <h3>Check-ins Today</h3>
-                <div class="value">3</div>
+                <div class="value">0</div>
             </div>
             <div class="stat-card">
                 <h3>Check-outs Today</h3>
-                <div class="value">2</div>
+                <div class="value">0</div>
             </div>
             <div class="stat-card total">
                 <h3>Total Guests</h3>
-                <div class="value">35</div>
+                <div class="value">0</div>
             </div>
         </div>
 
@@ -918,181 +923,7 @@
         </div>
 
         <div class="rooms-grid">
-            <div class="room-card">
-                <div class="room-header">
-                    <h3>Suite 101</h3>
-                    <div class="room-type">Luxury Suite</div>
-                </div>
-                <div class="room-body">
-                    <span class="status-badge occupied">Occupied</span>
-                    <div class="guest-info">
-                        <p><strong>Guest:</strong> Maria Santos</p>
-                        <p><strong>Contact:</strong> +63 912 345 6789</p>
-                    </div>
-                    <div class="dates-info">
-                        <div class="date-item">
-                            <label>Check-in</label>
-                            <span>Apr 12, 2026</span>
-                        </div>
-                        <div class="date-item">
-                            <label>Check-out</label>
-                            <span>Apr 15, 2026</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="room-actions">
-                    <button class="action-btn checkout">Process Check-out</button>
-                </div>
-            </div>
-
-            <div class="room-card">
-                <div class="room-header">
-                    <h3>Suite 102</h3>
-                    <div class="room-type">Luxury Suite</div>
-                </div>
-                <div class="room-body">
-                    <span class="status-badge occupied">Occupied</span>
-                    <div class="guest-info">
-                        <p><strong>Guest:</strong> John Rivera</p>
-                        <p><strong>Contact:</strong> +63 917 234 5678</p>
-                    </div>
-                    <div class="dates-info">
-                        <div class="date-item">
-                            <label>Check-in</label>
-                            <span>Apr 13, 2026</span>
-                        </div>
-                        <div class="date-item">
-                            <label>Check-out</label>
-                            <span>Apr 16, 2026</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="room-actions">
-                    <button class="action-btn checkout">Process Check-out</button>
-                </div>
-            </div>
-
-            <div class="room-card">
-                <div class="room-header">
-                    <h3>Deluxe 201</h3>
-                    <div class="room-type">Deluxe Room</div>
-                </div>
-                <div class="room-body">
-                    <span class="status-badge occupied">Occupied</span>
-                    <div class="guest-info">
-                        <p><strong>Guest:</strong> Lily Mendoza</p>
-                        <p><strong>Contact:</strong> +63 923 456 7890</p>
-                    </div>
-                    <div class="dates-info">
-                        <div class="date-item">
-                            <label>Check-in</label>
-                            <span>Apr 14, 2026</span>
-                        </div>
-                        <div class="date-item">
-                            <label>Check-out</label>
-                            <span>Apr 17, 2026</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="room-actions">
-                    <button class="action-btn checkout">Process Check-out</button>
-                </div>
-            </div>
-
-            <div class="room-card">
-                <div class="room-header">
-                    <h3>Standard 301</h3>
-                    <div class="room-type">Standard Room</div>
-                </div>
-                <div class="room-body">
-                    <span class="status-badge available">Available</span>
-                    <div class="guest-info">
-                        <p><strong>Status:</strong> Ready for check-in</p>
-                        <p><strong>Rate:</strong> ₱2,500/night</p>
-                    </div>
-                </div>
-                <div class="room-actions">
-                    <button class="action-btn checkin">Check-in Guest</button>
-                </div>
-            </div>
-
-            <div class="room-card">
-                <div class="room-header">
-                    <h3>Standard 302</h3>
-                    <div class="room-type">Standard Room</div>
-                </div>
-                <div class="room-body">
-                    <span class="status-badge available">Available</span>
-                    <div class="guest-info">
-                        <p><strong>Status:</strong> Ready for check-in</p>
-                        <p><strong>Rate:</strong> ₱2,500/night</p>
-                    </div>
-                </div>
-                <div class="room-actions">
-                    <button class="action-btn checkin">Check-in Guest</button>
-                </div>
-            </div>
-
-            <div class="room-card">
-                <div class="room-header">
-                    <h3>Dorm 401</h3>
-                    <div class="room-type">Shared Dorm</div>
-                </div>
-                <div class="room-body">
-                    <span class="status-badge occupied">Occupied</span>
-                    <div class="guest-info">
-                        <p><strong>Guests:</strong> 4/6 beds</p>
-                        <p><strong>Contact:</strong> +63 928 345 6789</p>
-                    </div>
-                    <div class="dates-info">
-                        <div class="date-item">
-                            <label>Check-in</label>
-                            <span>Apr 14, 2026</span>
-                        </div>
-                        <div class="date-item">
-                            <label>Check-out</label>
-                            <span>Apr 16, 2026</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="room-actions">
-                    <button class="action-btn checkout">Process Check-out</button>
-                </div>
-            </div>
-
-            <div class="room-card">
-                <div class="room-header">
-                    <h3>Suite 103</h3>
-                    <div class="room-type">Luxury Suite</div>
-                </div>
-                <div class="room-body">
-                    <span class="status-badge maintenance">Maintenance</span>
-                    <div class="guest-info">
-                        <p><strong>Status:</strong> Under renovation</p>
-                        <p><strong>Expected Ready:</strong> Apr 20, 2026</p>
-                    </div>
-                </div>
-                <div class="room-actions">
-                    <button class="action-btn maintenance">Update Status</button>
-                </div>
-            </div>
-
-            <div class="room-card">
-                <div class="room-header">
-                    <h3>Deluxe 202</h3>
-                    <div class="room-type">Deluxe Room</div>
-                </div>
-                <div class="room-body">
-                    <span class="status-badge available">Available</span>
-                    <div class="guest-info">
-                        <p><strong>Status:</strong> Ready for check-in</p>
-                        <p><strong>Rate:</strong> ₱3,500/night</p>
-                    </div>
-                </div>
-                <div class="room-actions">
-                    <button class="action-btn checkin">Check-in Guest</button>
-                </div>
-            </div>
+            <!-- Room cards will be dynamically generated by JavaScript -->
         </div>
 
         <div class="section-title">
@@ -1101,34 +932,7 @@
 
         <div class="recent-activity">
             <div class="activity-list">
-                <div class="activity-item">
-                    <div class="activity-info">
-                        <h4>Check-in: Maria Santos</h4>
-                        <p>Suite 101 - Luxury Suite</p>
-                    </div>
-                    <div class="activity-time">2 hours ago</div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-info">
-                        <h4>Check-out: Carlos Garcia</h4>
-                        <p>Deluxe 203 - Deluxe Room</p>
-                    </div>
-                    <div class="activity-time">5 hours ago</div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-info">
-                        <h4>Room Cleaned: Standard 301</h4>
-                        <p>Maintenance completed</p>
-                    </div>
-                    <div class="activity-time">8 hours ago</div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-info">
-                        <h4>Check-in: John Rivera</h4>
-                        <p>Suite 102 - Luxury Suite</p>
-                    </div>
-                    <div class="activity-time">Yesterday</div>
-                </div>
+                <!-- Activity items will be dynamically generated by JavaScript -->
             </div>
         </div>
     </div>
@@ -1141,97 +945,432 @@
             }
         }
 
-        // Guest Statistics Chart
-        const guestCtx = document.getElementById('guestChart').getContext('2d');
-        new Chart(guestCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Today', 'Yesterday', '2 Days Ago', '3 Days Ago', '4 Days Ago', '5 Days Ago', '6 Days Ago'],
-                datasets: [{
-                    label: 'Guest Count',
-                    data: [35, 28, 32, 25, 30, 22, 27],
-                    backgroundColor: [
-                        'rgba(14, 165, 233, 0.8)',
-                        'rgba(14, 165, 233, 0.6)',
-                        'rgba(14, 165, 233, 0.6)',
-                        'rgba(14, 165, 233, 0.6)',
-                        'rgba(14, 165, 233, 0.6)',
-                        'rgba(14, 165, 233, 0.6)',
-                        'rgba(14, 165, 233, 0.6)'
-                    ],
-                    borderColor: '#0ea5e9',
-                    borderWidth: 2,
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
+        // Assign room number to an existing booking (for old bookings without assignedRoom)
+        function assignRoomToBooking(booking) {
+            const existingBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            console.log(`Assigning room for booking: ${booking.roomType}, ref: ${booking.referenceNumber}`);
+
+            // Get all bookings for this room type that have assignedRoom
+            const typeBookings = existingBookings.filter(b => {
+                if (!b.assignedRoom || b.referenceNumber === booking.referenceNumber) return false;
+                const checkoutDate = new Date(b.checkout);
+                checkoutDate.setHours(0, 0, 0, 0);
+                return b.roomType === booking.roomType && (checkoutDate > today);
+            });
+
+            // Room prefixes
+            const prefixes = {
+                'standard': 'STD',
+                'deluxe': 'DLX',
+                'suite': 'SUI',
+                'cottage': 'COT',
+                'dorm': 'DOR'
+            };
+
+            const prefix = prefixes[booking.roomType] || 'STD';
+            const assignedRooms = typeBookings.map(b => b.assignedRoom);
+
+            console.log(`Already assigned rooms for ${booking.roomType}:`, assignedRooms);
+
+            // Find the next available room number (sequential per room type)
+            for (let i = 1; i <= 5; i++) {
+                const roomNumber = `${prefix}-${i}`;
+                if (!assignedRooms.includes(roomNumber)) {
+                    console.log(`Assigning room: ${roomNumber}`);
+                    return roomNumber;
+                }
+            }
+
+            console.log(`All rooms booked, assigning ${prefix}-1`);
+            return `${prefix}-1`;
+        }
+
+        // Load booking data from localStorage and update dashboard
+        function loadBookingData() {
+            let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            
+            console.log('Bookings before assignment:', bookings);
+            
+            // Assign room numbers to old bookings that don't have assignedRoom
+            bookings = bookings.map(booking => {
+                if (!booking.assignedRoom) {
+                    console.log(`Booking ${booking.referenceNumber} has no assignedRoom, assigning one...`);
+                    booking.assignedRoom = assignRoomToBooking(booking);
+                    console.log(`Assigned room: ${booking.assignedRoom}`);
+                }
+                return booking;
+            });
+            
+            // Save updated bookings back to localStorage
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            
+            console.log('Loaded bookings from localStorage:', bookings);
+            console.log('Total bookings:', bookings.length);
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Calculate stats
+            let occupied = 0;
+            let booked = 0;
+            let checkinsToday = 0;
+            let checkoutsToday = 0;
+            let totalGuests = 0;
+            const totalRooms = 25;
+            const maintenanceRooms = 2;
+
+            bookings.forEach(booking => {
+                const checkinDate = new Date(booking.checkin);
+                const checkoutDate = new Date(booking.checkout);
+                checkinDate.setHours(0, 0, 0, 0);
+                checkoutDate.setHours(0, 0, 0, 0);
+
+                // Count occupied rooms (check-in <= today < check-out)
+                if (checkinDate <= today && today < checkoutDate) {
+                    occupied++;
+                    totalGuests += parseInt(booking.guests);
+                }
+                // Count booked rooms (future check-ins)
+                else if (checkinDate > today && checkoutDate > today) {
+                    booked++;
+                }
+
+                // Count check-ins today
+                if (checkinDate.getTime() === today.getTime()) {
+                    checkinsToday++;
+                }
+
+                // Count check-outs today
+                if (checkoutDate.getTime() === today.getTime()) {
+                    checkoutsToday++;
+                }
+            });
+
+            const available = totalRooms - occupied - booked - maintenanceRooms;
+
+            // Update stats cards
+            document.querySelector('.stat-card.occupied .value').textContent = occupied;
+            document.querySelector('.stat-card.available .value').textContent = available;
+            document.querySelector('.stat-card.checkin .value').textContent = checkinsToday;
+            document.querySelector('.stat-card:nth-child(4) .value').textContent = checkoutsToday;
+            document.querySelector('.stat-card.total .value').textContent = totalGuests;
+
+            // Update occupancy chart
+            const occupancyData = [occupied, booked, available, maintenanceRooms];
+            if (window.occupancyChartInstance) {
+                window.occupancyChartInstance.data.labels = ['Occupied', 'Booked', 'Available', 'Maintenance'];
+                window.occupancyChartInstance.data.datasets[0].data = occupancyData;
+                window.occupancyChartInstance.data.datasets[0].backgroundColor = ['#10b981', '#f97316', '#0ea5e9', '#f59e0b'];
+                window.occupancyChartInstance.update();
+            }
+
+            // Update guest chart with last 7 days data
+            const guestData = [];
+            const labels = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                labels.push(i === 0 ? 'Today' : i === 1 ? 'Yesterday' : `${i} Days Ago`);
+
+                let dayGuests = 0;
+                bookings.forEach(booking => {
+                    const checkinDate = new Date(booking.checkin);
+                    const checkoutDate = new Date(booking.checkout);
+                    checkinDate.setHours(0, 0, 0, 0);
+                    checkoutDate.setHours(0, 0, 0, 0);
+                    const checkDate = new Date(dateStr);
+
+                    if (checkinDate <= checkDate && checkDate < checkoutDate) {
+                        dayGuests += parseInt(booking.guests);
                     }
+                });
+                guestData.push(dayGuests);
+            }
+
+            if (window.guestChartInstance) {
+                window.guestChartInstance.data.labels = labels;
+                window.guestChartInstance.data.datasets[0].data = guestData;
+                window.guestChartInstance.update();
+            }
+
+            // Update room cards with actual bookings
+            updateRoomCards(bookings, today);
+
+            // Update recent activity
+            updateRecentActivity(bookings);
+        }
+
+        // Update recent activity section
+        function updateRecentActivity(bookings) {
+            const activityList = document.querySelector('.activity-list');
+            activityList.innerHTML = '';
+
+            // Sort bookings by booking date (most recent first)
+            const sortedBookings = [...bookings].sort((a, b) => {
+                return new Date(b.bookingDate) - new Date(a.bookingDate);
+            });
+
+            // Show last 5 bookings
+            sortedBookings.slice(0, 5).forEach(booking => {
+                const bookingDate = new Date(booking.bookingDate);
+                const now = new Date();
+                const diffHours = Math.floor((now - bookingDate) / (1000 * 60 * 60));
+                let timeText;
+
+                if (diffHours < 1) {
+                    timeText = 'Just now';
+                } else if (diffHours < 24) {
+                    timeText = `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+                } else {
+                    const diffDays = Math.floor(diffHours / 24);
+                    timeText = `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+                }
+
+                const activityItem = document.createElement('div');
+                activityItem.className = 'activity-item';
+                activityItem.innerHTML = `
+                    <div class="activity-info">
+                        <h4>Booking: ${booking.fullName}</h4>
+                        <p>${booking.roomType.charAt(0).toUpperCase() + booking.roomType.slice(1)} - ${booking.paymentMethod}</p>
+                    </div>
+                    <div class="activity-time">${timeText}</div>
+                `;
+                activityList.appendChild(activityItem);
+            });
+
+            if (sortedBookings.length === 0) {
+                activityList.innerHTML = '<div class="activity-item"><div class="activity-info"><h4>No recent activity</h4><p>Bookings will appear here</p></div></div>';
+            }
+        }
+
+        // Update room cards with booking data
+        function updateRoomCards(bookings, today) {
+            const roomsGrid = document.querySelector('.rooms-grid');
+            roomsGrid.innerHTML = '';
+
+            // Room types and their counts
+            const roomTypes = [
+                { type: 'standard', name: 'Standard Room', count: 5, prefix: 'STD' },
+                { type: 'deluxe', name: 'Deluxe Room', count: 5, prefix: 'DLX' },
+                { type: 'suite', name: 'Luxury Suite', count: 5, prefix: 'SUI' },
+                { type: 'cottage', name: 'Beachfront Cottage', count: 5, prefix: 'COT' },
+                { type: 'dorm', name: 'Shared Dorm', count: 5, prefix: 'DOR' }
+            ];
+
+            let roomCounter = 1;
+
+            // Create room cards
+            roomTypes.forEach(roomType => {
+                for (let i = 1; i <= roomType.count; i++) {
+                    const roomNumber = `${roomType.prefix}-${i}`;
+                    const roomCard = createRoomCard(roomNumber, roomType.name, bookings, today, roomType.type);
+                    roomsGrid.appendChild(roomCard);
+                }
+            });
+        }
+
+        // Create a room card element
+        function createRoomCard(roomNumber, roomType, bookings, today, roomTypeKey) {
+            const card = document.createElement('div');
+            card.className = 'room-card';
+
+            console.log(`Checking room ${roomNumber} (${roomTypeKey})`);
+
+            // Find booking for this specific room number
+            const booking = bookings.find(b => {
+                if (!b.assignedRoom) return false;
+                const checkinDate = new Date(b.checkin);
+                const checkoutDate = new Date(b.checkout);
+                checkinDate.setHours(0, 0, 0, 0);
+                checkoutDate.setHours(0, 0, 0, 0);
+                // Match if the room is currently occupied or booked for future
+                const matches = b.assignedRoom === roomNumber && (checkinDate <= today && today < checkoutDate || checkinDate > today);
+                if (matches) {
+                    console.log(`Found booking for room ${roomNumber}:`, b);
+                }
+                return matches;
+            });
+
+            if (booking) {
+                const checkinDate = new Date(booking.checkin);
+                const checkoutDate = new Date(booking.checkout);
+                checkinDate.setHours(0, 0, 0, 0);
+                checkoutDate.setHours(0, 0, 0, 0);
+                
+                const isOccupied = checkinDate <= today && today < checkoutDate;
+                const status = isOccupied ? 'occupied' : 'booked';
+                const statusText = isOccupied ? 'Occupied' : 'Booked';
+
+                card.innerHTML = `
+                    <div class="room-header">
+                        <h3>${roomNumber}</h3>
+                        <div class="room-type">${roomType}</div>
+                    </div>
+                    <div class="room-body">
+                        <span class="status-badge ${status}">${statusText}</span>
+                        <div class="guest-info">
+                            <p><strong>Guest:</strong> ${booking.fullName}</p>
+                            <p><strong>Contact:</strong> ${booking.phone}</p>
+                        </div>
+                        <div class="dates-info">
+                            <div class="date-item">
+                                <label>Check-in</label>
+                                <span>${formatDate(booking.checkin)}</span>
+                            </div>
+                            <div class="date-item">
+                                <label>Check-out</label>
+                                <span>${formatDate(booking.checkout)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="room-actions">
+                        ${isOccupied ? `<button class="action-btn checkout" onclick="processCheckout('${booking.referenceNumber}')">Process Check-out</button>` : `<button class="action-btn" disabled>Upcoming Booking</button>`}
+                    </div>
+                `;
+            } else {
+                card.innerHTML = `
+                    <div class="room-header">
+                        <h3>${roomNumber}</h3>
+                        <div class="room-type">${roomType}</div>
+                    </div>
+                    <div class="room-body">
+                        <span class="status-badge available">Available</span>
+                        <div class="guest-info">
+                            <p><strong>Status:</strong> Ready for booking</p>
+                        </div>
+                    </div>
+                    <div class="room-actions">
+                        <button class="action-btn book">Book Room</button>
+                    </div>
+                `;
+            }
+
+            return card;
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        // Process checkout
+        function processCheckout(referenceNumber) {
+            if (confirm('Are you sure you want to process check-out for this booking?')) {
+                let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+                bookings = bookings.filter(b => b.referenceNumber !== referenceNumber);
+                localStorage.setItem('bookings', JSON.stringify(bookings));
+                loadBookingData(); // Refresh dashboard
+            }
+        }
+
+        // Initialize charts
+        function initializeCharts() {
+            // Destroy existing chart instances if they exist
+            if (window.guestChartInstance) {
+                window.guestChartInstance.destroy();
+            }
+            if (window.occupancyChartInstance) {
+                window.occupancyChartInstance.destroy();
+            }
+
+            // Guest Statistics Chart
+            const guestCtx = document.getElementById('guestChart').getContext('2d');
+            window.guestChartInstance = new Chart(guestCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Today', 'Yesterday', '2 Days Ago', '3 Days Ago', '4 Days Ago', '5 Days Ago', '6 Days Ago'],
+                    datasets: [{
+                        label: 'Guest Count',
+                        data: [0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: [
+                            'rgba(14, 165, 233, 0.8)',
+                            'rgba(14, 165, 233, 0.6)',
+                            'rgba(14, 165, 233, 0.6)',
+                            'rgba(14, 165, 233, 0.6)',
+                            'rgba(14, 165, 233, 0.6)',
+                            'rgba(14, 165, 233, 0.6)',
+                            'rgba(14, 165, 233, 0.6)'
+                        ],
+                        borderColor: '#0ea5e9',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: '#f1f5f9'
-                        },
-                        ticks: {
-                            font: {
-                                size: window.innerWidth < 768 ? 10 : 12
-                            }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
                         }
                     },
-                    x: {
-                        grid: {
-                            display: false
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#f1f5f9'
+                            },
+                            ticks: {
+                                font: {
+                                    size: window.innerWidth < 768 ? 10 : 12
+                                }
+                            }
                         },
-                        ticks: {
-                            font: {
-                                size: window.innerWidth < 768 ? 10 : 12
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: window.innerWidth < 768 ? 10 : 12
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
 
-        // Occupancy Rate Chart
-        const occupancyCtx = document.getElementById('occupancyChart').getContext('2d');
-        new Chart(occupancyCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Occupied', 'Available', 'Maintenance'],
-                datasets: [{
-                    data: [12, 8, 2],
-                    backgroundColor: [
-                        '#10b981',
-                        '#0ea5e9',
-                        '#f59e0b'
-                    ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: window.innerWidth < 768 ? 10 : 20,
-                            usePointStyle: true,
-                            pointStyle: 'circle',
-                            font: {
-                                size: window.innerWidth < 768 ? 11 : 14
+            // Occupancy Rate Chart
+            const occupancyCtx = document.getElementById('occupancyChart').getContext('2d');
+            window.occupancyChartInstance = new Chart(occupancyCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Occupied', 'Booked', 'Available', 'Maintenance'],
+                    datasets: [{
+                        data: [0, 0, 23, 2],
+                        backgroundColor: [
+                            '#10b981',
+                            '#f97316',
+                            '#0ea5e9',
+                            '#f59e0b'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: window.innerWidth < 768 ? 10 : 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                font: {
+                                    size: window.innerWidth < 768 ? 11 : 14
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
 
         // Responsive chart update on window resize
         window.addEventListener('resize', function() {
@@ -1252,103 +1391,13 @@
             }
         });
 
-        // Store chart instances for resize handling
-        window.guestChartInstance = new Chart(guestCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Today', 'Yesterday', '2 Days Ago', '3 Days Ago', '4 Days Ago', '5 Days Ago', '6 Days Ago'],
-                datasets: [{
-                    label: 'Guest Count',
-                    data: [35, 28, 32, 25, 30, 22, 27],
-                    backgroundColor: [
-                        'rgba(14, 165, 233, 0.8)',
-                        'rgba(14, 165, 233, 0.6)',
-                        'rgba(14, 165, 233, 0.6)',
-                        'rgba(14, 165, 233, 0.6)',
-                        'rgba(14, 165, 233, 0.6)',
-                        'rgba(14, 165, 233, 0.6)',
-                        'rgba(14, 165, 233, 0.6)'
-                    ],
-                    borderColor: '#0ea5e9',
-                    borderWidth: 2,
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: '#f1f5f9'
-                        },
-                        ticks: {
-                            font: {
-                                size: window.innerWidth < 768 ? 10 : 12
-                            }
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            font: {
-                                size: window.innerWidth < 768 ? 10 : 12
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Occupancy Rate Chart
-        window.occupancyChartInstance = new Chart(occupancyCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Occupied', 'Available', 'Maintenance'],
-                datasets: [{
-                    data: [12, 8, 2],
-                    backgroundColor: [
-                        '#10b981',
-                        '#0ea5e9',
-                        '#f59e0b'
-                    ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: window.innerWidth < 768 ? 10 : 20,
-                            usePointStyle: true,
-                            pointStyle: 'circle',
-                            font: {
-                                size: window.innerWidth < 768 ? 11 : 14
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Filter functionality
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+        // Filter functionality with event delegation
+        document.querySelector('.filter-buttons').addEventListener('click', function(e) {
+            if (e.target.classList.contains('filter-btn')) {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
+                e.target.classList.add('active');
 
-                const filter = this.textContent.toLowerCase();
+                const filter = e.target.textContent.toLowerCase();
                 const roomCards = document.querySelectorAll('.room-card');
 
                 roomCards.forEach(card => {
@@ -1363,16 +1412,7 @@
                         card.style.display = 'none';
                     }
                 });
-            });
-        });
-
-        // Action button handlers
-        document.querySelectorAll('.action-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const action = this.classList.contains('checkin') ? 'Check-in' : 
-                              this.classList.contains('checkout') ? 'Check-out' : 'Update';
-                alert(`${action} functionality would be implemented here`);
-            });
+            }
         });
 
         function toggleMobileMenu() {
@@ -1381,6 +1421,12 @@
             mobileMenu.classList.toggle('active');
             hamburger.classList.toggle('active');
         }
+
+        // Load booking data on page load
+        window.onload = function() {
+            initializeCharts();
+            loadBookingData();
+        };
     </script>
 </body>
 </html>
