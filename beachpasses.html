@@ -375,9 +375,35 @@
             line-height: 1.8;
         }
 
+        @media (max-width: 1024px) {
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+
+            .passes {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+
+            .info-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
         @media (max-width: 768px) {
+            .hero {
+                height: 40vh;
+            }
+
             .hero-content h1 {
                 font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
             }
 
             .nav-links {
@@ -392,12 +418,119 @@
                 padding: 0 1.5rem;
             }
 
+            .logo {
+                font-size: 1.2rem;
+            }
+
             .section {
                 padding: 60px 1.5rem;
             }
 
+            .section h2 {
+                font-size: 2rem;
+            }
+
             .passes {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .pass-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .pass-icon {
+                font-size: 2.5rem;
+            }
+
+            .pass-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .pass-card .price {
+                font-size: 1.6rem;
+            }
+
+            .cta-button {
+                padding: 12px 30px;
+                font-size: 0.85rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 0 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                height: 35vh;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 0.9rem;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .logo {
+                font-size: 1rem;
+            }
+
+            .section {
+                padding: 50px 1rem;
+            }
+
+            .section h2 {
+                font-size: 1.6rem;
+            }
+
+            .pass-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .pass-icon {
+                font-size: 2rem;
+            }
+
+            .pass-card h3 {
+                font-size: 1.1rem;
+            }
+
+            .pass-card .price {
+                font-size: 1.4rem;
+            }
+
+            .pass-card p {
+                font-size: 0.85rem;
+            }
+
+            .pass-card ul li {
+                font-size: 0.85rem;
+            }
+
+            .cta-button {
+                padding: 10px 25px;
+                font-size: 0.8rem;
+            }
+
+            .info-grid {
+                padding: 0 1rem;
+            }
+
+            .info-item h3 {
+                font-size: 1.1rem;
+            }
+
+            .info-item p {
+                font-size: 0.9rem;
             }
         }
     </style>

@@ -120,18 +120,18 @@
         }
 
         .logout-btn {
-            padding: 8px 16px;
-            background: var(--danger);
-            color: white;
+            padding: 8px;
+            background: transparent;
+            color: var(--text-dark);
             text-decoration: none;
             border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .logout-btn:hover {
-            background: #dc2626;
             transform: translateY(-1px);
         }
 
@@ -217,22 +217,6 @@
 
         .person-icon:hover {
             background: var(--secondary);
-        }
-
-        .logout-btn {
-            padding: 8px 20px;
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background: #dc2626;
         }
 
         .dashboard {
@@ -571,11 +555,48 @@
         .chart-container {
             position: relative;
             height: 300px;
+            width: 100%;
+        }
+
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rooms-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
         }
 
         @media (max-width: 768px) {
+            .dashboard {
+                padding: 6rem 1.5rem 3rem;
+            }
+
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .stat-card .value {
+                font-size: 2rem;
             }
 
             .nav-buttons {
@@ -595,16 +616,208 @@
                 padding: 0 1.5rem;
             }
 
-            .rooms-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
+            }
+
+            .filter-buttons {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
             }
 
             .rooms-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .room-card {
+                border-radius: 12px;
+            }
+
+            .room-header {
+                padding: 1.25rem;
+            }
+
+            .room-header h3 {
+                font-size: 1.1rem;
+            }
+
+            .room-body {
+                padding: 1.25rem;
+            }
+
+            .room-actions {
+                padding: 0.875rem 1.25rem;
+            }
+
+            .action-btn {
+                padding: 8px;
+                font-size: 0.8rem;
             }
 
             .charts-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .chart-card {
+                padding: 1.5rem;
+            }
+
+            .chart-card h3 {
+                font-size: 1.1rem;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+
+            .recent-activity {
+                padding: 1.5rem;
+            }
+
+            .activity-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .activity-time {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .logo {
+                font-size: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .header p {
+                font-size: 0.9rem;
+            }
+
+            .stat-card {
+                padding: 1.25rem;
+            }
+
+            .stat-card h3 {
+                font-size: 0.8rem;
+            }
+
+            .stat-card .value {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+
+            .filter-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+
+            .room-header {
+                padding: 1rem;
+            }
+
+            .room-header h3 {
+                font-size: 1rem;
+            }
+
+            .room-type {
+                font-size: 0.8rem;
+            }
+
+            .room-body {
+                padding: 1rem;
+            }
+
+            .status-badge {
+                padding: 4px 10px;
+                font-size: 0.7rem;
+            }
+
+            .guest-info p {
+                font-size: 0.8rem;
+            }
+
+            .dates-info {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .date-item {
+                font-size: 0.75rem;
+            }
+
+            .room-actions {
+                padding: 0.75rem 1rem;
+            }
+
+            .action-btn {
+                padding: 8px;
+                font-size: 0.75rem;
+            }
+
+            .chart-card {
+                padding: 1.25rem;
+            }
+
+            .chart-card h3 {
+                font-size: 1rem;
+            }
+
+            .chart-container {
+                height: 200px;
+            }
+
+            .recent-activity {
+                padding: 1.25rem;
+            }
+
+            .activity-info h4 {
+                font-size: 0.9rem;
+            }
+
+            .activity-info p {
+                font-size: 0.8rem;
+            }
+
+            .activity-time {
+                font-size: 0.75rem;
+            }
+
+            .logout-btn {
+                display: none;
             }
         }
     </style>
@@ -612,14 +825,18 @@
 <body>
     <nav>
         <div class="nav-container">
-            <a href="admin-dashboard.html" class="logo">Tagboananan Admin</a>
+            <a href="admin.html" class="logo">Tagboananan Admin</a>
             <div class="nav-buttons">
-                <a href="admin-dashboard.html" class="nav-btn active">Dashboard</a>
+                <a href="admin.html" class="nav-btn active">Dashboard</a>
                 <a href="inventory.html" class="nav-btn">Inventory</a>
             </div>
             <div class="nav-actions">
                 <span>👤 Admin</span>
-                <a href="index.html" onclick="handleLogout(event)" class="logout-btn">Logout</a>
+                <a href="index.html" onclick="handleLogout(event)" class="logout-btn">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6.5C2 4.01472 4.01472 2 6.5 2H12C14.2091 2 16 3.79086 16 6V7C16 7.55228 15.5523 8 15 8C14.4477 8 14 7.55228 14 7V6C14 4.89543 13.1046 4 12 4H6.5C5.11929 4 4 5.11929 4 6.5V17.5C4 18.8807 5.11929 20 6.5 20H12C13.1046 20 14 19.1046 14 18V17C14 16.4477 14.4477 16 15 16C15.5523 16 16 16.4477 16 17V18C16 20.2091 14.2091 22 12 22H6.5C4.01472 22 2 19.9853 2 17.5V6.5ZM18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289L22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071C17.9024 15.3166 17.9024 14.6834 18.2929 14.2929L19.5858 13L11 13C10.4477 13 10 12.5523 10 12C10 11.4477 10.4477 11 11 11L19.5858 11L18.2929 9.70711C17.9024 9.31658 17.9024 8.68342 18.2929 8.29289Z" fill="#1e293b"></path>
+                    </svg>
+                </a>
             </div>
             <div class="hamburger" onclick="toggleMobileMenu()">
                 <span></span>
@@ -631,9 +848,8 @@
 
     <div class="mobile-menu" id="mobileMenu">
         <ul>
-            <li><a href="admin-dashboard.html" onclick="toggleMobileMenu()" class="active">Dashboard</a></li>
+            <li><a href="admin.html" onclick="toggleMobileMenu()" class="active">Dashboard</a></li>
             <li><a href="inventory.html" onclick="toggleMobileMenu()">Inventory</a></li>
-            <li><a href="index.html" onclick="handleLogout(event)">Logout</a></li>
         </ul>
     </div>
 
@@ -957,11 +1173,21 @@
                         beginAtZero: true,
                         grid: {
                             color: '#f1f5f9'
+                        },
+                        ticks: {
+                            font: {
+                                size: window.innerWidth < 768 ? 10 : 12
+                            }
                         }
                     },
                     x: {
                         grid: {
                             display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: window.innerWidth < 768 ? 10 : 12
+                            }
                         }
                     }
                 }
@@ -991,9 +1217,121 @@
                     legend: {
                         position: 'bottom',
                         labels: {
-                            padding: 20,
+                            padding: window.innerWidth < 768 ? 10 : 20,
                             usePointStyle: true,
-                            pointStyle: 'circle'
+                            pointStyle: 'circle',
+                            font: {
+                                size: window.innerWidth < 768 ? 11 : 14
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Responsive chart update on window resize
+        window.addEventListener('resize', function() {
+            const isMobile = window.innerWidth < 768;
+            
+            // Update guest chart
+            if (window.guestChartInstance) {
+                window.guestChartInstance.options.scales.y.ticks.font.size = isMobile ? 10 : 12;
+                window.guestChartInstance.options.scales.x.ticks.font.size = isMobile ? 10 : 12;
+                window.guestChartInstance.update();
+            }
+            
+            // Update occupancy chart
+            if (window.occupancyChartInstance) {
+                window.occupancyChartInstance.options.plugins.legend.labels.padding = isMobile ? 10 : 20;
+                window.occupancyChartInstance.options.plugins.legend.labels.font.size = isMobile ? 11 : 14;
+                window.occupancyChartInstance.update();
+            }
+        });
+
+        // Store chart instances for resize handling
+        window.guestChartInstance = new Chart(guestCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Today', 'Yesterday', '2 Days Ago', '3 Days Ago', '4 Days Ago', '5 Days Ago', '6 Days Ago'],
+                datasets: [{
+                    label: 'Guest Count',
+                    data: [35, 28, 32, 25, 30, 22, 27],
+                    backgroundColor: [
+                        'rgba(14, 165, 233, 0.8)',
+                        'rgba(14, 165, 233, 0.6)',
+                        'rgba(14, 165, 233, 0.6)',
+                        'rgba(14, 165, 233, 0.6)',
+                        'rgba(14, 165, 233, 0.6)',
+                        'rgba(14, 165, 233, 0.6)',
+                        'rgba(14, 165, 233, 0.6)'
+                    ],
+                    borderColor: '#0ea5e9',
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#f1f5f9'
+                        },
+                        ticks: {
+                            font: {
+                                size: window.innerWidth < 768 ? 10 : 12
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: window.innerWidth < 768 ? 10 : 12
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Occupancy Rate Chart
+        window.occupancyChartInstance = new Chart(occupancyCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Occupied', 'Available', 'Maintenance'],
+                datasets: [{
+                    data: [12, 8, 2],
+                    backgroundColor: [
+                        '#10b981',
+                        '#0ea5e9',
+                        '#f59e0b'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: window.innerWidth < 768 ? 10 : 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            font: {
+                                size: window.innerWidth < 768 ? 11 : 14
+                            }
                         }
                     }
                 }
