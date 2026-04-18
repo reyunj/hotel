@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Orders Admin - Tagboanan Beach Resort</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0ea5e9;
+            --secondary: #0284c7;
+            --accent: #f97316;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --cream: #faf8f5;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: var(--cream);
+            min-height: 100vh;
+        }
+
+        nav {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 3rem;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: white;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logout-btn {
+            padding: 8px;
+            background: transparent;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+            z-index: 1002;
+            padding: 10px;
+            margin-left: 1rem;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 4px;
+            background: var(--text-dark);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 2rem;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .mobile-menu a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .page {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 8rem 3rem 3rem;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-light);
+            font-size: 1.05rem;
+            max-width: 760px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 2rem;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-light);
+            margin-bottom: 1.25rem;
+        }
+
+        .summary-stats {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .summary-item {
+            padding: 1rem;
+            border-radius: 14px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-item span {
+            display: block;
+            color: var(--text-light);
+            font-size: 0.82rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .summary-item strong {
+            font-size: 1.5rem;
+        }
+
+        .helper-box {
+            background: #fff7ed;
+            border: 1px solid #fdba74;
+            border-radius: 14px;
+            padding: 1rem 1.25rem;
+            color: #9a3412;
+            margin-bottom: 1.5rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-btn {
+            padding: 10px 18px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: var(--text-dark);
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .orders-meta {
+            color: var(--text-light);
+            margin-bottom: 1.25rem;
+        }
+
+        .order-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .order-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.25rem;
+            background: white;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: start;
+        }
+
+        .order-header h3 {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .order-meta-small {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .status {
+            display: inline-flex;
+            width: fit-content;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status.preparing {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.ready {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status.served {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .order-lines {
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        .order-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            font-size: 0.92rem;
+        }
+
+        .empty-state {
+            border: 1px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-light);
+            background: #f8fafc;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .nav-buttons {
+                display: none;
+            }
+
+            .nav-actions span,
+            .logout-btn {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+                margin-left: 0;
+            }
+
+            .nav-container {
+                padding: 0 1.5rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .logo {
+                font-size: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="admin.html" class="logo">Tagboananan Admin</a>
+            <div class="nav-buttons">
+                <a href="admin.html" class="nav-btn">Dashboard</a>
+                <a href="inventory.html" class="nav-btn">Inventory</a>
+                <a href="food-menu.html" class="nav-btn">Food Menu</a>
+                <a href="active-orders.html" class="nav-btn active">Active Orders</a>
+            </div>
+            <div class="nav-actions">
+                <span>👤 Admin</span>
+                <a href="index.html" onclick="handleLogout(event)" class="logout-btn">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6.5C2 4.01472 4.01472 2 6.5 2H12C14.2091 2 16 3.79086 16 6V7C16 7.55228 15.5523 8 15 8C14.4477 8 14 7.55228 14 7V6C14 4.89543 13.1046 4 12 4H6.5C5.11929 4 4 5.11929 4 6.5V17.5C4 18.8807 5.11929 20 6.5 20H12C13.1046 20 14 19.1046 14 18V17C14 16.4477 14.4477 16 15 16C15.5523 16 16 16.4477 16 17V18C16 20.2091 14.2091 22 12 22H6.5C4.01472 22 2 19.9853 2 17.5V6.5ZM18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289L22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071C17.9024 15.3166 17.9024 14.6834 18.2929 14.2929L19.5858 13L11 13C10.4477 13 10 12.5523 10 12C10 11.4477 10.4477 11 11 11L19.5858 11L18.2929 9.70711C17.9024 9.31658 17.9024 8.68342 18.2929 8.29289Z" fill="#1e293b"></path>
+                    </svg>
+                </a>
+            </div>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="admin.html" onclick="toggleMobileMenu()">Dashboard</a></li>
+            <li><a href="inventory.html" onclick="toggleMobileMenu()">Inventory</a></li>
+            <li><a href="food-menu.html" onclick="toggleMobileMenu()">Food Menu</a></li>
+            <li><a href="active-orders.html" onclick="toggleMobileMenu()" class="active">Active Orders</a></li>
+        </ul>
+    </div>
+
+    <main class="page">
+        <div class="header">
+            <h1>Active Food Orders</h1>
+            <p>Static kitchen board for staff reference so they can immediately see what dishes are being prepared, which tables or rooms requested them, and which orders are ready to serve.</p>
+        </div>
+
+        <div class="layout">
+            <aside class="card">
+                <h2>Kitchen Snapshot</h2>
+                <p>Quick summary of the live demo queue.</p>
+                <div class="summary-stats" id="summaryStats"></div>
+            </aside>
+
+            <section class="card">
+                <h2>Order Queue</h2>
+                <p class="orders-meta" id="ordersMeta"></p>
+                <div class="helper-box">This is a front-end-only demo board. Filters help staff focus on what is currently being prepared, ready, or already served.</div>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all" onclick="setOrderFilter('all')">All</button>
+                    <button class="filter-btn" data-filter="preparing" onclick="setOrderFilter('preparing')">Preparing</button>
+                    <button class="filter-btn" data-filter="ready" onclick="setOrderFilter('ready')">Ready</button>
+                    <button class="filter-btn" data-filter="served" onclick="setOrderFilter('served')">Served</button>
+                </div>
+                <div class="order-list" id="orderList"></div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const demoOrders = [
+            {
+                id: 'ORD-1001',
+                guest: 'Alyssa Gomez',
+                source: 'Room COT-2',
+                requestedAt: '11:15 AM',
+                status: 'preparing',
+                notes: 'No chili sauce',
+                items: [
+                    { name: 'Seafood Bilao', qty: 1 },
+                    { name: 'Fresh Mango Shake', qty: 2 }
+                ]
+            },
+            {
+                id: 'ORD-1002',
+                guest: 'Walk-in Table 4',
+                source: 'Beachfront Dining',
+                requestedAt: '11:28 AM',
+                status: 'ready',
+                notes: 'Serve with extra plates',
+                items: [
+                    { name: 'Grilled Pork BBQ Skewers', qty: 3 },
+                    { name: 'Rice Platter', qty: 1 }
+                ]
+            },
+            {
+                id: 'ORD-1003',
+                guest: 'Carlos Lim',
+                source: 'Room DLX-3',
+                requestedAt: '10:54 AM',
+                status: 'served',
+                notes: 'Charge to room folio',
+                items: [
+                    { name: 'Halo-Halo', qty: 2 },
+                    { name: 'Iced Tea Pitcher', qty: 1 }
+                ]
+            },
+            {
+                id: 'ORD-1004',
+                guest: 'Poolside Cabana 2',
+                source: 'Cabana Service',
+                requestedAt: '11:37 AM',
+                status: 'preparing',
+                notes: 'One order should be kid-friendly',
+                items: [
+                    { name: 'Chicken Inasal', qty: 2 },
+                    { name: 'Fresh Buko Juice', qty: 2 }
+                ]
+            }
+        ];
+
+        let currentFilter = 'all';
+
+        function renderSummary() {
+            const summaryStats = document.getElementById('summaryStats');
+            const summaries = [
+                { label: 'Total Active Tickets', value: demoOrders.length },
+                { label: 'Preparing Now', value: demoOrders.filter(order => order.status === 'preparing').length },
+                { label: 'Ready to Serve', value: demoOrders.filter(order => order.status === 'ready').length },
+                { label: 'Served Recently', value: demoOrders.filter(order => order.status === 'served').length }
+            ];
+
+            summaryStats.innerHTML = summaries.map(item => `
+                <div class="summary-item">
+                    <span>${item.label}</span>
+                    <strong>${item.value}</strong>
+                </div>
+            `).join('');
+        }
+
+        function renderOrders() {
+            const orderList = document.getElementById('orderList');
+            const ordersMeta = document.getElementById('ordersMeta');
+            const filteredOrders = currentFilter === 'all'
+                ? demoOrders
+                : demoOrders.filter(order => order.status === currentFilter);
+
+            ordersMeta.textContent = currentFilter === 'all'
+                ? 'Showing every active sample order for kitchen and service staff.'
+                : `Showing ${filteredOrders.length} ${currentFilter} order${filteredOrders.length === 1 ? '' : 's'} for staff focus.`;
+
+            if (filteredOrders.length === 0) {
+                orderList.innerHTML = '<div class="empty-state">No orders match this filter right now.</div>';
+                return;
+            }
+
+            orderList.innerHTML = filteredOrders.map(order => `
+                <article class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <h3>${order.id} - ${order.guest}</h3>
+                            <div class="order-meta-small">${order.source} • Requested ${order.requestedAt}</div>
+                        </div>
+                        <span class="status ${order.status}">${order.status}</span>
+                    </div>
+                    <div class="order-lines">
+                        ${order.items.map(item => `
+                            <div class="order-line">
+                                <span>${item.name}</span>
+                                <strong>x${item.qty}</strong>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="order-meta-small"><strong>Notes:</strong> ${order.notes}</div>
+                </article>
+            `).join('');
+        }
+
+        function setOrderFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.classList.toggle('active', button.dataset.filter === filter);
+            });
+            renderOrders();
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const hamburger = document.querySelector('.hamburger');
+            mobileMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        renderSummary();
+        renderOrders();
+    </script>
+</body>
+</html>

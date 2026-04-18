@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Menu Admin - Tagboanan Beach Resort</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0ea5e9;
+            --secondary: #0284c7;
+            --accent: #f97316;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --cream: #faf8f5;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: var(--cream);
+            min-height: 100vh;
+        }
+
+        nav {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 3rem;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: white;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logout-btn {
+            padding: 8px;
+            background: transparent;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+            z-index: 1002;
+            padding: 10px;
+            margin-left: 1rem;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 4px;
+            background: var(--text-dark);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 2rem;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .mobile-menu a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .page {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 8rem 3rem 3rem;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-light);
+            font-size: 1.05rem;
+            max-width: 760px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(320px, 400px) 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 2rem;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .food-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.92rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 0.9rem 1rem;
+            font: inherit;
+            background: #fff;
+        }
+
+        .form-group textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .submit-btn,
+        .toggle-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 0.95rem 1rem;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background: var(--secondary);
+        }
+
+        .list-meta {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .food-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .food-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: #e2e8f0;
+        }
+
+        .food-card-body {
+            padding: 1.25rem;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .food-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .food-top h3 {
+            font-size: 1rem;
+        }
+
+        .price {
+            color: var(--primary);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .category {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-light);
+        }
+
+        .description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .availability {
+            display: inline-flex;
+            width: fit-content;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .availability.available {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .availability.unavailable {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .toggle-btn.available {
+            background: var(--danger);
+            color: white;
+        }
+
+        .toggle-btn.unavailable {
+            background: var(--success);
+            color: white;
+        }
+
+        .helper-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 14px;
+            padding: 1rem 1.25rem;
+            color: #1e40af;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .nav-buttons {
+                display: none;
+            }
+
+            .nav-actions span,
+            .logout-btn {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+                margin-left: 0;
+            }
+
+            .nav-container {
+                padding: 0 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .food-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .logo {
+                font-size: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="admin.html" class="logo">Tagboananan Admin</a>
+            <div class="nav-buttons">
+                <a href="admin.html" class="nav-btn">Dashboard</a>
+                <a href="inventory.html" class="nav-btn">Inventory</a>
+                <a href="food-menu.html" class="nav-btn active">Food Menu</a>
+                <a href="active-orders.html" class="nav-btn">Active Orders</a>
+            </div>
+            <div class="nav-actions">
+                <span>👤 Admin</span>
+                <a href="index.html" onclick="handleLogout(event)" class="logout-btn">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6.5C2 4.01472 4.01472 2 6.5 2H12C14.2091 2 16 3.79086 16 6V7C16 7.55228 15.5523 8 15 8C14.4477 8 14 7.55228 14 7V6C14 4.89543 13.1046 4 12 4H6.5C5.11929 4 4 5.11929 4 6.5V17.5C4 18.8807 5.11929 20 6.5 20H12C13.1046 20 14 19.1046 14 18V17C14 16.4477 14.4477 16 15 16C15.5523 16 16 16.4477 16 17V18C16 20.2091 14.2091 22 12 22H6.5C4.01472 22 2 19.9853 2 17.5V6.5ZM18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289L22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071C17.9024 15.3166 17.9024 14.6834 18.2929 14.2929L19.5858 13L11 13C10.4477 13 10 12.5523 10 12C10 11.4477 10.4477 11 11 11L19.5858 11L18.2929 9.70711C17.9024 9.31658 17.9024 8.68342 18.2929 8.29289Z" fill="#1e293b"></path>
+                    </svg>
+                </a>
+            </div>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="admin.html" onclick="toggleMobileMenu()">Dashboard</a></li>
+            <li><a href="inventory.html" onclick="toggleMobileMenu()">Inventory</a></li>
+            <li><a href="food-menu.html" onclick="toggleMobileMenu()" class="active">Food Menu</a></li>
+            <li><a href="active-orders.html" onclick="toggleMobileMenu()">Active Orders</a></li>
+        </ul>
+    </div>
+
+    <main class="page">
+        <div class="header">
+            <h1>Food Menu Management</h1>
+            <p>Demo admin page where staff can add food cards, preview the menu, and mark each dish as available or unavailable without connecting to a backend.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Menu Items</h3>
+                <div class="value" id="totalItems">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Available Now</h3>
+                <div class="value" id="availableItems">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Unavailable</h3>
+                <div class="value" id="unavailableItems">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Categories</h3>
+                <div class="value" id="categoryCount">0</div>
+            </div>
+        </div>
+
+        <div class="layout">
+            <section class="card">
+                <h2>Add Demo Menu Item</h2>
+                <p>Use this form to simulate uploading a new menu item for the resort restaurant.</p>
+                <div class="helper-box">Tip: since this is a demo, image upload is simulated using an image URL. Paste any public image URL so the card looks realistic.</div>
+                <form class="food-form" id="foodMenuForm">
+                    <div class="form-group">
+                        <label for="foodName">Menu name</label>
+                        <input type="text" id="foodName" name="foodName" placeholder="Example: Seafood Bilao" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodCategory">Category</label>
+                        <select id="foodCategory" name="foodCategory" required>
+                            <option value="">Select category</option>
+                            <option value="Main Course">Main Course</option>
+                            <option value="Grilled">Grilled</option>
+                            <option value="Snacks">Snacks</option>
+                            <option value="Beverages">Beverages</option>
+                            <option value="Dessert">Dessert</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodPrice">Price</label>
+                        <input type="number" id="foodPrice" name="foodPrice" min="1" placeholder="350" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodImage">Image URL</label>
+                        <input type="url" id="foodImage" name="foodImage" placeholder="https://images.unsplash.com/..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodAvailability">Availability</label>
+                        <select id="foodAvailability" name="foodAvailability" required>
+                            <option value="available">Available</option>
+                            <option value="unavailable">Unavailable</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodDescription">Description</label>
+                        <textarea id="foodDescription" name="foodDescription" placeholder="Short description for staff and guest reference" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Add Menu Item</button>
+                </form>
+            </section>
+
+            <section class="card">
+                <h2>Current Menu Preview</h2>
+                <p class="list-meta" id="menuMeta"></p>
+                <div class="food-grid" id="foodGrid"></div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const defaultFoodMenus = [
+            {
+                id: 1,
+                name: 'Seafood Bilao',
+                category: 'Main Course',
+                price: 1299,
+                image: 'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=80',
+                availability: 'available',
+                description: 'Good for 4-6 guests with grilled shrimp, crab, mussels, rice, and dipping sauces.'
+            },
+            {
+                id: 2,
+                name: 'Grilled Pork BBQ Skewers',
+                category: 'Grilled',
+                price: 220,
+                image: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=1200&q=80',
+                availability: 'available',
+                description: 'Sweet and smoky grilled skewers, ideal for beachside snacking.'
+            },
+            {
+                id: 3,
+                name: 'Fresh Mango Shake',
+                category: 'Beverages',
+                price: 150,
+                image: 'https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?auto=format&fit=crop&w=1200&q=80',
+                availability: 'unavailable',
+                description: 'Chilled tropical mango shake served in a tall glass.'
+            }
+        ];
+
+        function getFoodMenus() {
+            const storedMenus = localStorage.getItem('foodMenus');
+            if (!storedMenus) {
+                localStorage.setItem('foodMenus', JSON.stringify(defaultFoodMenus));
+                return [...defaultFoodMenus];
+            }
+            return JSON.parse(storedMenus);
+        }
+
+        function saveFoodMenus(menus) {
+            localStorage.setItem('foodMenus', JSON.stringify(menus));
+        }
+
+        function renderFoodMenus() {
+            const menus = getFoodMenus();
+            const foodGrid = document.getElementById('foodGrid');
+            const totalItems = document.getElementById('totalItems');
+            const availableItems = document.getElementById('availableItems');
+            const unavailableItems = document.getElementById('unavailableItems');
+            const categoryCount = document.getElementById('categoryCount');
+            const menuMeta = document.getElementById('menuMeta');
+
+            totalItems.textContent = menus.length;
+            availableItems.textContent = menus.filter(item => item.availability === 'available').length;
+            unavailableItems.textContent = menus.filter(item => item.availability === 'unavailable').length;
+            categoryCount.textContent = new Set(menus.map(item => item.category)).size;
+            menuMeta.textContent = 'Click each card button to simulate changing dish availability for the demo.';
+
+            foodGrid.innerHTML = '';
+
+            menus.forEach(item => {
+                const card = document.createElement('article');
+                card.className = 'food-card';
+                card.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="food-card-body">
+                        <div class="food-top">
+                            <div>
+                                <div class="category">${item.category}</div>
+                                <h3>${item.name}</h3>
+                            </div>
+                            <div class="price">₱${Number(item.price).toLocaleString()}</div>
+                        </div>
+                        <span class="availability ${item.availability}">${item.availability}</span>
+                        <p class="description">${item.description}</p>
+                        <button class="toggle-btn ${item.availability}" onclick="toggleAvailability(${item.id})">${item.availability === 'available' ? 'Mark Unavailable' : 'Mark Available'}</button>
+                    </div>
+                `;
+                foodGrid.appendChild(card);
+            });
+        }
+
+        function toggleAvailability(id) {
+            const menus = getFoodMenus().map(item => {
+                if (item.id === id) {
+                    return {
+                        ...item,
+                        availability: item.availability === 'available' ? 'unavailable' : 'available'
+                    };
+                }
+                return item;
+            });
+            saveFoodMenus(menus);
+            renderFoodMenus();
+        }
+
+        document.getElementById('foodMenuForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const menus = getFoodMenus();
+            const formData = new FormData(event.target);
+            const newItem = {
+                id: Date.now(),
+                name: formData.get('foodName'),
+                category: formData.get('foodCategory'),
+                price: Number(formData.get('foodPrice')),
+                image: formData.get('foodImage'),
+                availability: formData.get('foodAvailability'),
+                description: formData.get('foodDescription')
+            };
+
+            menus.unshift(newItem);
+            saveFoodMenus(menus);
+            event.target.reset();
+            renderFoodMenus();
+        });
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const hamburger = document.querySelector('.hamburger');
+            mobileMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        renderFoodMenus();
+    </script>
+</body>
+</html>
