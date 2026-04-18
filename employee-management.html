@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management - Tagboanan Beach Resort</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0ea5e9;
+            --secondary: #0284c7;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --cream: #faf8f5;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: var(--cream);
+            min-height: 100vh;
+        }
+        nav {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 3rem;
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+        .nav-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .nav-btn {
+            padding: 10px 20px;
+            background: white;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover, .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .nav-actions { display: flex; align-items: center; gap: 1.5rem; }
+        .logout-btn {
+            padding: 8px;
+            background: transparent;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+            padding: 10px;
+        }
+        .hamburger span {
+            width: 30px;
+            height: 4px;
+            background: var(--text-dark);
+            border-radius: 4px;
+            display: block;
+        }
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 2rem;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .mobile-menu.active { display: block; }
+        .mobile-menu ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .mobile-menu a { color: var(--text-dark); text-decoration: none; font-weight: 500; font-size: 1.1rem; }
+        .page {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 8rem 3rem 3rem;
+        }
+        .header { margin-bottom: 2rem; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .header p { color: var(--text-light); max-width: 820px; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .stat-card h3 {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+        .stat-card .value { font-size: 1.8rem; font-weight: 700; }
+        .layout {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 2rem;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .card h2 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .card p { color: var(--text-light); margin-bottom: 1.25rem; }
+        .employee-list, .payroll-list, .attendance-list { display: grid; gap: 1rem; }
+        .employee-item, .payroll-item, .attendance-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 1rem;
+            background: #f8fafc;
+        }
+        .item-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.6rem;
+        }
+        .item-head h3 { font-size: 1rem; }
+        .muted { color: var(--text-light); font-size: 0.9rem; }
+        .pill {
+            display: inline-flex;
+            width: fit-content;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            margin-top: 0.75rem;
+        }
+        .mini-cell {
+            padding: 0.85rem;
+            border-radius: 12px;
+            background: white;
+            border: 1px solid #e2e8f0;
+        }
+        .mini-cell span { display: block; color: var(--text-light); font-size: 0.82rem; }
+        .mini-cell strong { font-size: 1rem; }
+        .helper-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 14px;
+            padding: 1rem 1.25rem;
+            color: #1d4ed8;
+            margin-bottom: 1.5rem;
+        }
+        @media (max-width: 1200px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .layout { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .page { padding: 6rem 1.5rem 3rem; }
+            .nav-buttons { display: none; }
+            .nav-actions span, .logout-btn { display: none; }
+            .hamburger { display: flex; }
+            .nav-container { padding: 0 1.5rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .card { padding: 1.5rem; }
+            .mini-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .page { padding: 5rem 1rem 2rem; }
+            .nav-container { padding: 0 1rem; }
+            .logo { font-size: 1rem; }
+            .header h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="admin.html" class="logo">Tagboananan Admin</a>
+            <div class="nav-buttons">
+                <a href="admin.html" class="nav-btn">Dashboard</a>
+                <a href="inventory.html" class="nav-btn">Inventory</a>
+                <a href="food-menu.html" class="nav-btn">Food Menu</a>
+                <a href="active-orders.html" class="nav-btn">Active Orders</a>
+                <a href="reports.html" class="nav-btn">Reports</a>
+                <a href="employee-management.html" class="nav-btn active">Employee</a>
+            </div>
+            <div class="nav-actions">
+                <span>👤 Admin</span>
+                <a href="index.html" onclick="handleLogout(event)" class="logout-btn">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6.5C2 4.01472 4.01472 2 6.5 2H12C14.2091 2 16 3.79086 16 6V7C16 7.55228 15.5523 8 15 8C14.4477 8 14 7.55228 14 7V6C14 4.89543 13.1046 4 12 4H6.5C5.11929 4 4 5.11929 4 6.5V17.5C4 18.8807 5.11929 20 6.5 20H12C13.1046 20 14 19.1046 14 18V17C14 16.4477 14.4477 16 15 16C15.5523 16 16 16.4477 16 17V18C16 20.2091 14.2091 22 12 22H6.5C4.01472 22 2 19.9853 2 17.5V6.5ZM18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289L22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071C17.9024 15.3166 17.9024 14.6834 18.2929 14.2929L19.5858 13L11 13C10.4477 13 10 12.5523 10 12C10 11.4477 10.4477 11 11 11L19.5858 11L18.2929 9.70711C17.9024 9.31658 17.9024 8.68342 18.2929 8.29289Z" fill="#1e293b"></path>
+                    </svg>
+                </a>
+            </div>
+            <div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="admin.html" onclick="toggleMobileMenu()">Dashboard</a></li>
+            <li><a href="inventory.html" onclick="toggleMobileMenu()">Inventory</a></li>
+            <li><a href="food-menu.html" onclick="toggleMobileMenu()">Food Menu</a></li>
+            <li><a href="active-orders.html" onclick="toggleMobileMenu()">Active Orders</a></li>
+            <li><a href="reports.html" onclick="toggleMobileMenu()">Reports</a></li>
+            <li><a href="employee-management.html" onclick="toggleMobileMenu()" class="active">Employee</a></li>
+        </ul>
+    </div>
+    <main class="page">
+        <div class="header">
+            <h1>Employee Attendance & Payroll Reference</h1>
+            <p>Static HR-friendly page to monitor employee attendance, daily rate, monthly salary estimate, and payroll reference without connecting to a backend.</p>
+        </div>
+        <div class="stats-grid" id="statCards"></div>
+        <div class="layout">
+            <section class="card">
+                <h2>Employee Directory</h2>
+                <p>Attendance, rates, and computed payroll values for current staff.</p>
+                <div class="helper-box">This demo page is useful for HR reference. Later, attendance logs and payroll cutoffs can be pulled from real employee records.</div>
+                <div class="employee-list" id="employeeList"></div>
+            </section>
+            <section class="card">
+                <h2>Payroll Snapshot</h2>
+                <p>Quick summary of total salary exposure and attendance health.</p>
+                <div class="payroll-list" id="payrollList"></div>
+                <h2 style="margin-top: 1.5rem;">Attendance Alerts</h2>
+                <p>Employees needing HR follow-up this period.</p>
+                <div class="attendance-list" id="attendanceList"></div>
+            </section>
+        </div>
+    </main>
+    <script>
+        const employees = [
+            {
+                name: 'Maria Santos',
+                role: 'Front Desk Officer',
+                employmentType: 'Monthly',
+                attendanceDays: 24,
+                lateCount: 1,
+                absentDays: 0,
+                dailyRate: 850,
+                monthlySalary: 22100,
+                status: 'Good Standing'
+            },
+            {
+                name: 'John dela Cruz',
+                role: 'Kitchen Staff',
+                employmentType: 'Daily',
+                attendanceDays: 22,
+                lateCount: 2,
+                absentDays: 1,
+                dailyRate: 780,
+                monthlySalary: 17160,
+                status: 'Review Attendance'
+            },
+            {
+                name: 'Elaine Ramos',
+                role: 'Housekeeping',
+                employmentType: 'Daily',
+                attendanceDays: 23,
+                lateCount: 0,
+                absentDays: 0,
+                dailyRate: 700,
+                monthlySalary: 16100,
+                status: 'Good Standing'
+            },
+            {
+                name: 'Paolo Reyes',
+                role: 'Maintenance',
+                employmentType: 'Monthly',
+                attendanceDays: 21,
+                lateCount: 3,
+                absentDays: 1,
+                dailyRate: 900,
+                monthlySalary: 23400,
+                status: 'Needs Follow-up'
+            }
+        ];
+        function peso(value) { return `₱${Number(value).toLocaleString()}`; }
+        function renderPage() {
+            const totalEmployees = employees.length;
+            const totalSalary = employees.reduce((sum, employee) => sum + employee.monthlySalary, 0);
+            const totalAttendance = employees.reduce((sum, employee) => sum + employee.attendanceDays, 0);
+            const alerts = employees.filter(employee => employee.lateCount >= 3 || employee.absentDays >= 1).length;
+            document.getElementById('statCards').innerHTML = [
+                ['Total Employees', totalEmployees],
+                ['Monthly Salary Exposure', peso(totalSalary)],
+                ['Total Attendance Days', totalAttendance],
+                ['Attendance Alerts', alerts]
+            ].map(item => `
+                <div class="stat-card">
+                    <h3>${item[0]}</h3>
+                    <div class="value">${item[1]}</div>
+                </div>
+            `).join('');
+            document.getElementById('employeeList').innerHTML = employees.map(employee => `
+                <article class="employee-item">
+                    <div class="item-head">
+                        <div>
+                            <h3>${employee.name}</h3>
+                            <div class="muted">${employee.role} • ${employee.employmentType} basis</div>
+                        </div>
+                        <span class="pill">${employee.status}</span>
+                    </div>
+                    <div class="mini-grid">
+                        <div class="mini-cell"><span>Attendance Days</span><strong>${employee.attendanceDays}</strong></div>
+                        <div class="mini-cell"><span>Daily Rate</span><strong>${peso(employee.dailyRate)}</strong></div>
+                        <div class="mini-cell"><span>Monthly Salary</span><strong>${peso(employee.monthlySalary)}</strong></div>
+                        <div class="mini-cell"><span>Late Count</span><strong>${employee.lateCount}</strong></div>
+                        <div class="mini-cell"><span>Absent Days</span><strong>${employee.absentDays}</strong></div>
+                        <div class="mini-cell"><span>Payroll Ref</span><strong>${peso(employee.attendanceDays * employee.dailyRate)}</strong></div>
+                    </div>
+                </article>
+            `).join('');
+            document.getElementById('payrollList').innerHTML = [
+                ['Highest Salary Cost', employees.reduce((a, b) => a.monthlySalary > b.monthlySalary ? a : b).name],
+                ['Average Salary', peso(Math.round(totalSalary / totalEmployees))],
+                ['Daily-rate Staff Count', employees.filter(employee => employee.employmentType === 'Daily').length],
+                ['Monthly-rate Staff Count', employees.filter(employee => employee.employmentType === 'Monthly').length]
+            ].map(item => `
+                <div class="payroll-item">
+                    <strong>${item[0]}</strong>
+                    <div class="muted">${item[1]}</div>
+                </div>
+            `).join('');
+            const alertEmployees = employees.filter(employee => employee.lateCount >= 3 || employee.absentDays >= 1);
+            document.getElementById('attendanceList').innerHTML = alertEmployees.map(employee => `
+                <div class="attendance-item">
+                    <strong>${employee.name}</strong>
+                    <div class="muted">${employee.role}</div>
+                    <div class="muted">Late: ${employee.lateCount} • Absent: ${employee.absentDays}</div>
+                </div>
+            `).join('') || '<div class="attendance-item"><strong>No attendance alerts</strong><div class="muted">Everyone is within acceptable thresholds.</div></div>';
+        }
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'index.html';
+            }
+        }
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+        renderPage();
+    </script>
+</body>
+</html>
