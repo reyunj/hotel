@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added a room setup form in `admin.html` so admins can create new room details in the demo dashboard.
 - Added `food-menu.html` as a separate admin page for demo food menu management.
 - Added `active-orders.html` as a separate admin page for demo active food order tracking.
 - Added `reports.html` as a separate admin reporting page for food revenue, room revenue, inventory expenses, salary expenses, and estimated net income.
@@ -32,6 +33,15 @@
 - Admin can toggle each menu item between `available` and `unavailable`.
 - Menu data is stored in browser `localStorage` only for demo playaround, with no backend connection.
 
+### Room Setup Demo Flow
+
+- Admin opens `admin.html` and clicks the `Add Room` button in the `Room Setup` section.
+- A popup modal opens so the room form stays hidden until needed.
+- Admin enters room number, room type, nightly rate, default status, and room details.
+- New room entries are saved into browser `localStorage` as part of the room inventory.
+- Added rooms appear immediately in both the room inventory summary and the room overview cards.
+- The `Room Inventory Summary` is displayed below the `Guest Statistics` section for easier dashboard scanning.
+
 ### Active Orders Demo Flow
 
 - Admin or staff opens `Active Orders` from the admin navigation.
@@ -42,6 +52,8 @@
 ### Notes for Junior Developers
 
 - The room dashboard in `admin.html` was left unchanged so existing booking demo behavior remains stable.
+- `admin.html` now separates room inventory data from booking data so admins can add rooms without changing booking records directly.
+- The room creation experience now uses a modal popup so the dashboard stays cleaner and the form only appears when the admin needs it.
 - The new food-related features were split into separate HTML pages to match the existing admin navigation pattern used by `inventory.html`.
 - `food-menu.html` uses front-end-only state with `localStorage` so users can add and toggle menu items without a database.
 - `active-orders.html` uses static JavaScript data to simulate the kitchen workflow and staff reference view.

@@ -581,6 +581,195 @@
             height: 100% !important;
         }
 
+        .room-management-layout {
+            display: grid;
+            grid-template-columns: minmax(320px, 420px) 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            align-items: start;
+        }
+
+        .section-title.with-action {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .section-title.with-action h2 {
+            margin: 0;
+        }
+
+        .room-form-card,
+        .room-summary-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .room-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 0.9rem 1rem;
+            font: inherit;
+            color: var(--text-dark);
+            background: #fff;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-room-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 0.95rem 1rem;
+            background: var(--primary);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-room-btn:hover {
+            background: var(--secondary);
+        }
+
+        .helper-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 14px;
+            padding: 1rem 1.25rem;
+            color: #1d4ed8;
+            margin-bottom: 1.25rem;
+        }
+
+        .room-summary-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .room-summary-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+
+        .room-summary-item strong {
+            font-size: 1rem;
+            color: var(--text-dark);
+        }
+
+        .room-summary-item span {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .open-room-modal-btn,
+        .close-room-modal-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 0.9rem 1.15rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .open-room-modal-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .open-room-modal-btn:hover,
+        .close-room-modal-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .close-room-modal-btn {
+            background: #e2e8f0;
+            color: var(--text-dark);
+        }
+
+        .room-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            z-index: 1100;
+        }
+
+        .room-modal.active {
+            display: flex;
+        }
+
+        .room-modal-content {
+            width: min(100%, 720px);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
+        }
+
+        .room-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .room-modal-header p {
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .room-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
         @media (max-width: 1024px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -596,6 +785,10 @@
 
             .header h1 {
                 font-size: 2rem;
+            }
+
+            .room-management-layout {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -698,6 +891,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
             .chart-card {
                 padding: 1.5rem;
             }
@@ -711,6 +908,15 @@
             }
 
             .recent-activity {
+                padding: 1.5rem;
+            }
+
+            .room-form-card,
+            .room-summary-card {
+                padding: 1.5rem;
+            }
+
+            .room-modal-content {
                 padding: 1.5rem;
             }
 
@@ -889,6 +1095,11 @@
             <p>Manage room occupancy and guest check-ins</p>
         </div>
 
+        <div class="section-title with-action">
+            <h2>Room Setup</h2>
+            <button class="open-room-modal-btn" type="button" onclick="openRoomModal()">Add Room</button>
+        </div>
+
         <div class="stats-grid">
             <div class="stat-card occupied">
                 <h3>Occupied</h3>
@@ -933,6 +1144,13 @@
             </div>
         </div>
 
+        <div class="room-summary-card" style="margin-bottom: 3rem;">
+            <div class="section-title">
+                <h2>Room Inventory Summary</h2>
+            </div>
+            <div class="room-summary-list" id="roomSummaryList"></div>
+        </div>
+
         <div class="section-title">
             <h2>Room Overview</h2>
             <div class="filter-buttons">
@@ -958,12 +1176,219 @@
         </div>
     </div>
 
+    <div class="room-modal" id="roomModal" onclick="handleRoomModalBackdrop(event)">
+        <div class="room-modal-content">
+            <div class="room-modal-header">
+                <div>
+                    <h2>Add Room Details</h2>
+                    <p>Create a new demo room record for the admin inventory dashboard.</p>
+                </div>
+                <button class="close-room-modal-btn" type="button" onclick="closeRoomModal()">Close</button>
+            </div>
+            <div class="helper-box">Use this demo form to add a new room to the admin room inventory. New rooms will appear in the room overview immediately after saving.</div>
+            <form class="room-form" id="roomForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="roomNumber">Room Number</label>
+                        <input type="text" id="roomNumber" name="roomNumber" placeholder="Example: VIL-1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="roomTypeKey">Room Type</label>
+                        <select id="roomTypeKey" name="roomTypeKey" required>
+                            <option value="">Select room type</option>
+                            <option value="standard">Standard Room</option>
+                            <option value="deluxe">Deluxe Room</option>
+                            <option value="suite">Luxury Suite</option>
+                            <option value="cottage">Beachfront Cottage</option>
+                            <option value="dorm">Shared Dorm</option>
+                            <option value="villa">Private Villa</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="roomRate">Nightly Rate</label>
+                        <input type="number" id="roomRate" name="roomRate" min="0" placeholder="4500" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="roomStatus">Default Status</label>
+                        <select id="roomStatus" name="roomStatus" required>
+                            <option value="available">Available</option>
+                            <option value="maintenance">Maintenance</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="roomDescription">Room Details</label>
+                    <textarea id="roomDescription" name="roomDescription" placeholder="Add key room details like view, max guests, or amenities" required></textarea>
+                </div>
+                <div class="room-modal-actions">
+                    <button class="close-room-modal-btn" type="button" onclick="closeRoomModal()">Cancel</button>
+                    <button type="submit" class="submit-room-btn">Add Room Details</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
+        const defaultRoomInventory = [
+            { roomNumber: 'STD-1', type: 'standard', name: 'Standard Room', rate: 2800, description: 'Garden-view room for 2 guests', defaultStatus: 'available' },
+            { roomNumber: 'STD-2', type: 'standard', name: 'Standard Room', rate: 2800, description: 'Garden-view room for 2 guests', defaultStatus: 'available' },
+            { roomNumber: 'STD-3', type: 'standard', name: 'Standard Room', rate: 2800, description: 'Garden-view room for 2 guests', defaultStatus: 'available' },
+            { roomNumber: 'STD-4', type: 'standard', name: 'Standard Room', rate: 2800, description: 'Garden-view room for 2 guests', defaultStatus: 'available' },
+            { roomNumber: 'STD-5', type: 'standard', name: 'Standard Room', rate: 2800, description: 'Garden-view room for 2 guests', defaultStatus: 'available' },
+            { roomNumber: 'DLX-1', type: 'deluxe', name: 'Deluxe Room', rate: 4200, description: 'Pool-view deluxe room', defaultStatus: 'available' },
+            { roomNumber: 'DLX-2', type: 'deluxe', name: 'Deluxe Room', rate: 4200, description: 'Pool-view deluxe room', defaultStatus: 'available' },
+            { roomNumber: 'DLX-3', type: 'deluxe', name: 'Deluxe Room', rate: 4200, description: 'Pool-view deluxe room', defaultStatus: 'available' },
+            { roomNumber: 'DLX-4', type: 'deluxe', name: 'Deluxe Room', rate: 4200, description: 'Pool-view deluxe room', defaultStatus: 'available' },
+            { roomNumber: 'DLX-5', type: 'deluxe', name: 'Deluxe Room', rate: 4200, description: 'Pool-view deluxe room', defaultStatus: 'available' },
+            { roomNumber: 'SUI-1', type: 'suite', name: 'Luxury Suite', rate: 6800, description: 'Large suite with lounge space', defaultStatus: 'available' },
+            { roomNumber: 'SUI-2', type: 'suite', name: 'Luxury Suite', rate: 6800, description: 'Large suite with lounge space', defaultStatus: 'available' },
+            { roomNumber: 'SUI-3', type: 'suite', name: 'Luxury Suite', rate: 6800, description: 'Large suite with lounge space', defaultStatus: 'available' },
+            { roomNumber: 'SUI-4', type: 'suite', name: 'Luxury Suite', rate: 6800, description: 'Large suite with lounge space', defaultStatus: 'available' },
+            { roomNumber: 'SUI-5', type: 'suite', name: 'Luxury Suite', rate: 6800, description: 'Large suite with lounge space', defaultStatus: 'available' },
+            { roomNumber: 'COT-1', type: 'cottage', name: 'Beachfront Cottage', rate: 5400, description: 'Beachfront cottage near the shore', defaultStatus: 'available' },
+            { roomNumber: 'COT-2', type: 'cottage', name: 'Beachfront Cottage', rate: 5400, description: 'Beachfront cottage near the shore', defaultStatus: 'available' },
+            { roomNumber: 'COT-3', type: 'cottage', name: 'Beachfront Cottage', rate: 5400, description: 'Beachfront cottage near the shore', defaultStatus: 'available' },
+            { roomNumber: 'COT-4', type: 'cottage', name: 'Beachfront Cottage', rate: 5400, description: 'Beachfront cottage near the shore', defaultStatus: 'available' },
+            { roomNumber: 'COT-5', type: 'cottage', name: 'Beachfront Cottage', rate: 5400, description: 'Beachfront cottage near the shore', defaultStatus: 'available' },
+            { roomNumber: 'DOR-1', type: 'dorm', name: 'Shared Dorm', rate: 1600, description: 'Shared dorm room with bunk beds', defaultStatus: 'available' },
+            { roomNumber: 'DOR-2', type: 'dorm', name: 'Shared Dorm', rate: 1600, description: 'Shared dorm room with bunk beds', defaultStatus: 'available' },
+            { roomNumber: 'DOR-3', type: 'dorm', name: 'Shared Dorm', rate: 1600, description: 'Shared dorm room with bunk beds', defaultStatus: 'available' },
+            { roomNumber: 'DOR-4', type: 'dorm', name: 'Shared Dorm', rate: 1600, description: 'Shared dorm room with bunk beds', defaultStatus: 'maintenance' },
+            { roomNumber: 'DOR-5', type: 'dorm', name: 'Shared Dorm', rate: 1600, description: 'Shared dorm room with bunk beds', defaultStatus: 'maintenance' }
+        ];
+
+        const roomTypeLabels = {
+            standard: 'Standard Room',
+            deluxe: 'Deluxe Room',
+            suite: 'Luxury Suite',
+            cottage: 'Beachfront Cottage',
+            dorm: 'Shared Dorm',
+            villa: 'Private Villa'
+        };
+
+        function formatStorageDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function getDefaultDemoBookings() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+
+            const dayAfterTomorrow = new Date(today);
+            dayAfterTomorrow.setDate(today.getDate() + 2);
+
+            const threeDaysLater = new Date(today);
+            threeDaysLater.setDate(today.getDate() + 3);
+
+            const fourDaysLater = new Date(today);
+            fourDaysLater.setDate(today.getDate() + 4);
+
+            return [
+                {
+                    referenceNumber: 'BK-1001',
+                    fullName: 'Maria Santos',
+                    phone: '09171234567',
+                    roomType: 'standard',
+                    assignedRoom: 'STD-1',
+                    checkin: formatStorageDate(yesterday),
+                    checkout: formatStorageDate(tomorrow),
+                    guests: '2'
+                },
+                {
+                    referenceNumber: 'BK-1002',
+                    fullName: 'James Rivera',
+                    phone: '09181239876',
+                    roomType: 'deluxe',
+                    assignedRoom: 'DLX-2',
+                    checkin: formatStorageDate(today),
+                    checkout: formatStorageDate(dayAfterTomorrow),
+                    guests: '3'
+                },
+                {
+                    referenceNumber: 'BK-1003',
+                    fullName: 'Angela Cruz',
+                    phone: '09192345678',
+                    roomType: 'suite',
+                    assignedRoom: 'SUI-1',
+                    checkin: formatStorageDate(today),
+                    checkout: formatStorageDate(threeDaysLater),
+                    guests: '2'
+                },
+                {
+                    referenceNumber: 'BK-1004',
+                    fullName: 'Daniel Flores',
+                    phone: '09203456789',
+                    roomType: 'cottage',
+                    assignedRoom: 'COT-3',
+                    checkin: formatStorageDate(tomorrow),
+                    checkout: formatStorageDate(fourDaysLater),
+                    guests: '4'
+                }
+            ];
+        }
+
         // Logout function
         function handleLogout() {
             if (confirm('Are you sure you want to logout?')) {
                 window.location.href = 'index.html';
             }
+        }
+
+        function getRoomInventory() {
+            const storedRooms = localStorage.getItem('roomInventory');
+            if (!storedRooms) {
+                localStorage.setItem('roomInventory', JSON.stringify(defaultRoomInventory));
+                return [...defaultRoomInventory];
+            }
+            return JSON.parse(storedRooms);
+        }
+
+        function saveRoomInventory(rooms) {
+            localStorage.setItem('roomInventory', JSON.stringify(rooms));
+        }
+
+        function openRoomModal() {
+            document.getElementById('roomModal').classList.add('active');
+        }
+
+        function closeRoomModal() {
+            document.getElementById('roomModal').classList.remove('active');
+        }
+
+        function handleRoomModalBackdrop(event) {
+            if (event.target.id === 'roomModal') {
+                closeRoomModal();
+            }
+        }
+
+        function renderRoomSummary() {
+            const rooms = getRoomInventory();
+            const summaryList = document.getElementById('roomSummaryList');
+            const groupedRooms = rooms.reduce((acc, room) => {
+                if (!acc[room.type]) {
+                    acc[room.type] = { name: room.name, count: 0, maintenance: 0 };
+                }
+                acc[room.type].count += 1;
+                if (room.defaultStatus === 'maintenance') {
+                    acc[room.type].maintenance += 1;
+                }
+                return acc;
+            }, {});
+
+            summaryList.innerHTML = Object.values(groupedRooms).map(group => `
+                <div class="room-summary-item">
+                    <strong>${group.name}</strong>
+                    <span>${group.count} room${group.count > 1 ? 's' : ''} • ${group.maintenance} in maintenance</span>
+                </div>
+            `).join('');
         }
 
         // Assign room number to an existing booking (for old bookings without assignedRoom)
@@ -1012,6 +1437,12 @@
         // Load booking data from localStorage and update dashboard
         function loadBookingData() {
             let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            const roomInventory = getRoomInventory();
+
+            if (bookings.length === 0) {
+                bookings = getDefaultDemoBookings();
+                localStorage.setItem('bookings', JSON.stringify(bookings));
+            }
             
             console.log('Bookings before assignment:', bookings);
             
@@ -1040,8 +1471,8 @@
             let checkinsToday = 0;
             let checkoutsToday = 0;
             let totalGuests = 0;
-            const totalRooms = 25;
-            const maintenanceRooms = 2;
+            const totalRooms = roomInventory.length;
+            const maintenanceRooms = roomInventory.filter(room => room.defaultStatus === 'maintenance').length;
 
             bookings.forEach(booking => {
                 const checkinDate = new Date(booking.checkin);
@@ -1157,7 +1588,9 @@
             }
 
             // Update room cards with actual bookings
-            updateRoomCards(bookings, today);
+            updateRoomCards(bookings, today, roomInventory);
+
+            renderRoomSummary();
 
             // Update recent activity
             updateRecentActivity(bookings);
@@ -1207,37 +1640,24 @@
         }
 
         // Update room cards with booking data
-        function updateRoomCards(bookings, today) {
+        function updateRoomCards(bookings, today, roomInventory) {
             const roomsGrid = document.querySelector('.rooms-grid');
             roomsGrid.innerHTML = '';
 
-            // Room types and their counts
-            const roomTypes = [
-                { type: 'standard', name: 'Standard Room', count: 5, prefix: 'STD' },
-                { type: 'deluxe', name: 'Deluxe Room', count: 5, prefix: 'DLX' },
-                { type: 'suite', name: 'Luxury Suite', count: 5, prefix: 'SUI' },
-                { type: 'cottage', name: 'Beachfront Cottage', count: 5, prefix: 'COT' },
-                { type: 'dorm', name: 'Shared Dorm', count: 5, prefix: 'DOR' }
-            ];
-
-            let roomCounter = 1;
-
-            // Create room cards
-            roomTypes.forEach(roomType => {
-                for (let i = 1; i <= roomType.count; i++) {
-                    const roomNumber = `${roomType.prefix}-${i}`;
-                    const roomCard = createRoomCard(roomNumber, roomType.name, bookings, today, roomType.type);
-                    roomsGrid.appendChild(roomCard);
-                }
+            roomInventory.forEach(room => {
+                const roomCard = createRoomCard(room, bookings, today);
+                roomsGrid.appendChild(roomCard);
             });
         }
 
-        // Create a room card element
-        function createRoomCard(roomNumber, roomType, bookings, today, roomTypeKey) {
+        function createRoomCard(room, bookings, today) {
             const card = document.createElement('div');
             card.className = 'room-card';
 
-            console.log(`Checking room ${roomNumber} (${roomTypeKey})`);
+            const roomNumber = room.roomNumber;
+            const roomType = room.name;
+
+            console.log(`Checking room ${roomNumber} (${room.type})`);
 
             // Find booking for this specific room number
             const booking = bookings.find(b => {
@@ -1273,6 +1693,7 @@
                         <div class="guest-info">
                             <p><strong>Guest:</strong> ${booking.fullName}</p>
                             <p><strong>Contact:</strong> ${booking.phone}</p>
+                            <p><strong>Rate:</strong> ₱${Number(room.rate).toLocaleString()} / night</p>
                         </div>
                         <div class="dates-info">
                             <div class="date-item">
@@ -1300,13 +1721,15 @@
                         <div class="room-type">${roomType}</div>
                     </div>
                     <div class="room-body">
-                        <span class="status-badge available">Available</span>
+                        <span class="status-badge ${room.defaultStatus === 'maintenance' ? 'maintenance' : 'available'}">${room.defaultStatus === 'maintenance' ? 'Maintenance' : 'Available'}</span>
                         <div class="guest-info">
-                            <p><strong>Status:</strong> Ready for booking</p>
+                            <p><strong>Status:</strong> ${room.defaultStatus === 'maintenance' ? 'Temporarily unavailable' : 'Ready for booking'}</p>
+                            <p><strong>Rate:</strong> ₱${Number(room.rate).toLocaleString()} / night</p>
+                            <p><strong>Details:</strong> ${room.description}</p>
                         </div>
                     </div>
                     <div class="room-actions">
-                        <button class="action-btn book">Book Room</button>
+                        <button class="action-btn ${room.defaultStatus === 'maintenance' ? 'maintenance' : 'book'}" ${room.defaultStatus === 'maintenance' ? 'disabled' : ''}>${room.defaultStatus === 'maintenance' ? 'Under Maintenance' : 'Book Room'}</button>
                     </div>
                 `;
             }
@@ -1329,6 +1752,34 @@
                 loadBookingData(); // Refresh dashboard
             }
         }
+
+        document.getElementById('roomForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const rooms = getRoomInventory();
+            const formData = new FormData(event.target);
+            const roomNumber = formData.get('roomNumber').trim().toUpperCase();
+
+            if (rooms.some(room => room.roomNumber === roomNumber)) {
+                alert('Room number already exists. Please use a unique room number.');
+                return;
+            }
+
+            const roomTypeKey = formData.get('roomTypeKey');
+            rooms.push({
+                roomNumber,
+                type: roomTypeKey,
+                name: roomTypeLabels[roomTypeKey],
+                rate: Number(formData.get('roomRate')),
+                description: formData.get('roomDescription').trim(),
+                defaultStatus: formData.get('roomStatus')
+            });
+
+            saveRoomInventory(rooms);
+            event.target.reset();
+            closeRoomModal();
+            loadBookingData();
+        });
 
         // Initialize charts
         function initializeCharts() {
