@@ -2,37 +2,8 @@
 
 A pure HTML demo application for hotel management.
 
-## Running the App with Live Server
+## Available Pages
 
-### Prerequisites
-- Node.js installed (v22.14.0 or higher)
-
-### Setup
-
-1. Install live-server (one-time setup):
-```bash
-npm install --save-dev live-server
-```
-
-2. Start the live server:
-```bash
-npx live-server --port=8080 --open=/index.html
-```
-
-3. Open your browser and navigate to:
-```
-http://localhost:8080
-```
-
-### Features
-- **Auto-reload**: Any changes to HTML files will automatically reload in the browser when you save
-- **Local development**: Serves all files in the project directory
-- **No configuration needed**: Works out of the box with pure HTML files
-
-### Stopping the Server
-To stop the live server, press `Ctrl+C` in the terminal where it's running.
-
-### Available Pages
 - `index.html` - Main page
 - `about.html` - About page
 - `admin.html` - Admin panel
