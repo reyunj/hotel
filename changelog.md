@@ -1,5 +1,47 @@
 # Changelog
 
+## 2026-04-20
+
+### Supabase Integration
+
+- Connected the entire hotel admin application to Supabase backend-as-a-service.
+- Created `supabase-config.js` as a shared configuration file for Supabase client initialization across all admin pages.
+- Designed and implemented a complete database schema matching the existing frontend data structures.
+- Created Supabase tables: `rooms`, `bookings`, `inventory`, `food_menu`, `food_orders`, `food_order_items`, and `employees`.
+- Set up Row Level Security (RLS) policies to allow all operations for demo purposes.
+- Seeded all tables with demo data matching the original hardcoded/static data.
+- Updated all admin HTML pages to use Supabase API calls instead of localStorage or static arrays.
+
+### Supabase Schema
+
+- **rooms**: Stores room inventory (room_number, room_type, rate, description, status)
+- **bookings**: Stores guest bookings (full_name, phone, guests, check_in, check_out, room_type, assigned_room, status)
+- **inventory**: Stores resort supplies (category, item_name, description, quantity, status)
+- **food_menu**: Stores food menu items (name, category, price, image, availability, description)
+- **food_orders**: Stores food orders (order_number, guest_name, room_number, status, notes, total_amount)
+- **food_order_items**: Stores individual items within food orders (order_id, item_name, quantity)
+- **employees**: Stores employee records (full_name, position, employment_type, daily_rate, monthly_salary, attendance_days, late_count, absent_days, status)
+
+### Page-by-Page Changes
+
+- **admin.html**: Replaced localStorage calls with Supabase queries for rooms and bookings. Updated room form to save to Supabase. Made booking data loading async.
+- **inventory.html**: Replaced hardcoded HTML with dynamic rendering from Supabase. Added Supabase client library. Updated Add Item modal to save to Supabase.
+- **food-menu.html**: Replaced localStorage with Supabase for menu items. Updated availability toggle to update Supabase. Made menu loading async.
+- **active-orders.html**: Replaced static order data with Supabase queries. Added Supabase client library. Made order loading async.
+- **employee-management.html**: Replaced static employee array with Supabase queries. Added Supabase client library. Made employee loading async.
+- **reports.html**: Replaced static report data with Supabase queries. Added Supabase client library. Calculated metrics from actual Supabase data.
+
+### Notes for Junior Developers
+
+- The Supabase client is initialized once in `supabase-config.js` and included in all admin pages via script tags.
+- All data operations now use async/await pattern since Supabase calls are asynchronous.
+- The database schema uses snake_case naming convention (e.g., `room_number`, `full_name`) which is transformed to camelCase in the frontend for consistency.
+- RLS policies are set to allow all operations for demo purposes. In production, these should be restricted based on user roles.
+- The Supabase project ID is `qsbcdeehhcfuybyezmjd` and the project URL is `https://qsbcdeehhcfuybyezmjd.supabase.co`.
+- Demo data was seeded to match the original hardcoded values so the application behaves consistently.
+- CSV export in inventory.html now works with dynamically loaded Supabase data by reading from the rendered DOM.
+- All initialization calls (window.onload) have been updated to call async data loading functions.
+
 ## 2026-04-18
 
 ### Added

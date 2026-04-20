@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Management - Tagboanan Beach Resort</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
     <style>
         * {
             margin: 0;
@@ -902,304 +904,12 @@
             <h2>Room Supplies</h2>
             <div class="section-actions">
                 <button class="export-btn" type="button" onclick="exportInventoryToCSV()">Export CSV</button>
-                <button class="add-btn" type="button">+ Add Item</button>
+                <button class="add-btn" type="button" onclick="openModal()">+ Add Item</button>
             </div>
         </div>
 
-        <div class="category-grid">
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🛏️</div>
-                    <h3>Bedding & Linens</h3>
-                </div>
-                <div class="inventory-list">
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Towels (Bath)</h4>
-                            <p>Standard white bath towels</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">45</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Bed Sheets (King)</h4>
-                            <p>Premium cotton sheets</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">12</div>
-                            <span class="status low">Low Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Pillow Cases</h4>
-                            <p>Standard pillow cases</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">60</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Blankets</h4>
-                            <p>Warm blankets for rooms</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">25</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🧴</div>
-                    <h3>Toiletries</h3>
-                </div>
-                <div class="inventory-list">
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Shampoo Bottles</h4>
-                            <p>50ml travel size</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">120</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Soap Bars</h4>
-                            <p>Premium guest soap</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">85</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Lotion</h4>
-                            <p>Body lotion bottles</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">8</div>
-                            <span class="status low">Low Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Toilet Paper</h4>
-                            <p>Rolls per pack</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">200</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🍽️</div>
-                    <h3>Food & Beverages</h3>
-                </div>
-                <div class="inventory-list">
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Bottled Water</h4>
-                            <p>500ml bottles</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">500</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Coffee Beans</h4>
-                            <p>Premium Arabica kg</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">15</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Snack Packs</h4>
-                            <p>Assorted snacks</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">45</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Soft Drinks</h4>
-                            <p>Canned beverages</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">120</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🏖️</div>
-                    <h3>Beach Equipment</h3>
-                </div>
-                <div class="inventory-list">
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Beach Chairs</h4>
-                            <p>Folding beach chairs</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">30</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Umbrellas</h4>
-                            <p>Beach umbrellas</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">25</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Sunscreen</h4>
-                            <p>SPF 50 bottles</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">20</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Beach Towels</h4>
-                            <p>Large beach towels</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">50</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🔧</div>
-                    <h3>Maintenance Supplies</h3>
-                </div>
-                <div class="inventory-list">
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Cleaning Supplies</h4>
-                            <p>General cleaning kit</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">18</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Light Bulbs</h4>
-                            <p>LED bulbs various</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">35</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Tools</h4>
-                            <p>Basic tool set</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">5</div>
-                            <span class="status warning">Limited</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Paint Supplies</h4>
-                            <p>Touch-up paint</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">12</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">📋</div>
-                    <h3>Office Supplies</h3>
-                </div>
-                <div class="inventory-list">
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Printer Paper</h4>
-                            <p>A4 reams</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">25</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Pens</h4>
-                            <p>Ballpoint pens</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">100</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Receipt Paper</h4>
-                        <p>Thermal rolls</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">40</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                    <div class="inventory-item">
-                        <div class="item-info">
-                            <h4>Key Cards</h4>
-                            <p>Room key cards</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">50</div>
-                            <span class="status ok">In Stock</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="category-grid" id="categoryGrid">
+            <!-- Inventory items will be dynamically loaded from Supabase -->
         </div>
     </div>
 
@@ -1244,6 +954,107 @@
     </div>
 
     <script>
+        // Category icons mapping
+        const categoryIcons = {
+            'Bedding & Linens': '🛏️',
+            'Toiletries': '🧴',
+            'Kitchen Supplies': '🍽️',
+            'Cleaning Supplies': '🧹',
+            'Pool Equipment': '🏊',
+            'Maintenance Tools': '🔧',
+            'Office Supplies': '📋'
+        };
+
+        // Fetch inventory from Supabase
+        async function loadInventory() {
+            const { data, error } = await supabaseClient
+                .from('inventory')
+                .select('*')
+                .order('category', { ascending: true });
+            
+            if (error) {
+                console.error('Error fetching inventory:', error);
+                return;
+            }
+            
+            renderInventory(data);
+            updateStats(data);
+        }
+
+        // Render inventory items grouped by category
+        function renderInventory(inventoryItems) {
+            const categoryGrid = document.getElementById('categoryGrid');
+            categoryGrid.innerHTML = '';
+            
+            // Group items by category
+            const groupedItems = inventoryItems.reduce((acc, item) => {
+                if (!acc[item.category]) {
+                    acc[item.category] = [];
+                }
+                acc[item.category].push(item);
+                return acc;
+            }, {});
+            
+            // Render each category
+            Object.keys(groupedItems).forEach(category => {
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'category-card';
+                categoryCard.innerHTML = `
+                    <div class="category-header">
+                        <div class="category-icon">${categoryIcons[category] || '📦'}</div>
+                        <h3>${category}</h3>
+                    </div>
+                    <div class="inventory-list">
+                        ${groupedItems[category].map(item => `
+                            <div class="inventory-item">
+                                <div class="item-info">
+                                    <h4>${item.item_name}</h4>
+                                    <p>${item.description || 'No description'}</p>
+                                </div>
+                                <div class="item-quantity">
+                                    <div class="quantity">${item.quantity}</div>
+                                    <span class="status ${getStatusClass(item.status)}">${formatStatus(item.status)}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                categoryGrid.appendChild(categoryCard);
+            });
+        }
+
+        // Update statistics
+        function updateStats(inventoryItems) {
+            const totalItems = inventoryItems.length;
+            const lowStock = inventoryItems.filter(item => item.status === 'low_stock').length;
+            const inStock = inventoryItems.filter(item => item.status === 'in_stock').length;
+            const categories = new Set(inventoryItems.map(item => item.category)).size;
+            
+            document.querySelector('.stat-card:nth-child(1) .value').textContent = totalItems;
+            document.querySelector('.stat-card:nth-child(2) .value').textContent = lowStock;
+            document.querySelector('.stat-card:nth-child(3) .value').textContent = inStock;
+            document.querySelector('.stat-card:nth-child(4) .value').textContent = categories;
+        }
+
+        // Helper functions for status formatting
+        function getStatusClass(status) {
+            switch(status) {
+                case 'in_stock': return 'ok';
+                case 'low_stock': return 'low';
+                case 'out_of_stock': return 'warning';
+                default: return 'ok';
+            }
+        }
+
+        function formatStatus(status) {
+            switch(status) {
+                case 'in_stock': return 'In Stock';
+                case 'low_stock': return 'Low Stock';
+                case 'out_of_stock': return 'Out of Stock';
+                default: return status;
+            }
+        }
+
         function handleLogout() {
             if (confirm('Are you sure you want to logout?')) {
                 window.location.href = 'index.html';
@@ -1310,11 +1121,6 @@
             document.getElementById('addItemForm').reset();
         }
 
-        // Add button functionality
-        document.querySelectorAll('.add-btn').forEach(btn => {
-            btn.addEventListener('click', openModal);
-        });
-
         // Close modal when clicking outside
         document.getElementById('addItemModal').addEventListener('click', function(e) {
             if (e.target === this) {
@@ -1322,70 +1128,54 @@
             }
         });
 
-        // Form submission
-        document.getElementById('addItemForm').addEventListener('submit', function(e) {
+        // Form submission - save to Supabase
+        document.getElementById('addItemForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const itemName = document.getElementById('itemName').value;
             const category = document.getElementById('itemCategory').value;
-            const quantity = document.getElementById('itemQuantity').value;
+            const quantity = parseInt(document.getElementById('itemQuantity').value);
             const description = document.getElementById('itemDescription').value;
 
             // Category mapping
             const categoryMap = {
                 'bedding': 'Bedding & Linens',
                 'toiletries': 'Toiletries',
-                'food': 'Food & Beverages',
-                'beach': 'Beach Equipment',
-                'maintenance': 'Maintenance Supplies',
+                'food': 'Kitchen Supplies',
+                'beach': 'Pool Equipment',
+                'maintenance': 'Maintenance Tools',
                 'office': 'Office Supplies'
             };
 
-            // Find the category card and add the new item
-            const categoryCards = document.querySelectorAll('.category-card');
-            categoryCards.forEach(card => {
-                const categoryTitle = card.querySelector('.category-header h3').textContent;
-                if (categoryTitle === categoryMap[category]) {
-                    const inventoryList = card.querySelector('.inventory-list');
-                    
-                    // Determine stock status
-                    let stockStatus = 'ok';
-                    if (quantity < 10) {
-                        stockStatus = 'low';
-                    } else if (quantity < 20) {
-                        stockStatus = 'warning';
-                    }
-
-                    const newItem = document.createElement('div');
-                    newItem.className = 'inventory-item';
-                    newItem.innerHTML = `
-                        <div class="item-info">
-                            <h4>${itemName}</h4>
-                            <p>${description || 'No description'}</p>
-                        </div>
-                        <div class="item-quantity">
-                            <div class="quantity">${quantity}</div>
-                            <span class="status ${stockStatus}">${stockStatus === 'ok' ? 'In Stock' : stockStatus === 'low' ? 'Low Stock' : 'Limited'}</span>
-                        </div>
-                    `;
-                    
-                    inventoryList.appendChild(newItem);
-                }
-            });
-
-            // Update statistics
-            const totalItemsEl = document.querySelector('.stat-card:nth-child(1) .value');
-            const inStockEl = document.querySelector('.stat-card:nth-child(3) .value');
+            const categoryName = categoryMap[category] || 'Other';
             
-            if (totalItemsEl) {
-                totalItemsEl.textContent = parseInt(totalItemsEl.textContent) + 1;
+            // Determine stock status
+            let stockStatus = 'in_stock';
+            if (quantity < 10) {
+                stockStatus = 'low_stock';
+            } else if (quantity === 0) {
+                stockStatus = 'out_of_stock';
             }
-            if (inStockEl) {
-                inStockEl.textContent = parseInt(inStockEl.textContent) + 1;
+
+            const { error } = await supabaseClient
+                .from('inventory')
+                .insert([{
+                    category: categoryName,
+                    item_name: itemName,
+                    description: description,
+                    quantity: quantity,
+                    status: stockStatus
+                }]);
+
+            if (error) {
+                console.error('Error adding item:', error);
+                alert('Error adding item. Please try again.');
+                return;
             }
 
             alert(`Item "${itemName}" added successfully!`);
             closeModal();
+            loadInventory(); // Reload inventory
         });
 
         function toggleMobileMenu() {
@@ -1394,6 +1184,9 @@
             mobileMenu.classList.toggle('active');
             hamburger.classList.toggle('active');
         }
+
+        // Load inventory on page load
+        window.onload = loadInventory;
     </script>
 </body>
 </html>

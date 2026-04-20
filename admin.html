@@ -6,6 +6,8 @@
     <title>Admin Dashboard - Tagboanan Beach Resort</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
     <style>
         * {
             margin: 0;
@@ -1342,17 +1344,54 @@
             }
         }
 
-        function getRoomInventory() {
-            const storedRooms = localStorage.getItem('roomInventory');
-            if (!storedRooms) {
-                localStorage.setItem('roomInventory', JSON.stringify(defaultRoomInventory));
-                return [...defaultRoomInventory];
+        async function getRoomInventory() {
+            const { data, error } = await supabaseClient
+                .from('rooms')
+                .select('*')
+                .order('room_number');
+            
+            if (error) {
+                console.error('Error fetching rooms:', error);
+                // Fallback to default if error occurs
+                return defaultRoomInventory;
             }
-            return JSON.parse(storedRooms);
+            
+            // Transform Supabase data to match expected format
+            return data.map(room => ({
+                id: room.id,
+                type: room.room_type,
+                name: room.room_type.charAt(0).toUpperCase() + room.room_type.slice(1),
+                rate: room.rate,
+                description: room.description,
+                defaultStatus: room.status === 'occupied' ? 'occupied' : 'available',
+                roomNumber: room.room_number
+            }));
         }
 
-        function saveRoomInventory(rooms) {
-            localStorage.setItem('roomInventory', JSON.stringify(rooms));
+        async function saveRoomInventory(rooms) {
+            // This function is now handled by individual room operations
+            // Kept for backward compatibility
+            console.log('saveRoomInventory called - use individual room operations instead');
+        }
+
+        async function addRoomToSupabase(roomData) {
+            const { data, error } = await supabaseClient
+                .from('rooms')
+                .insert([{
+                    room_number: roomData.roomNumber,
+                    room_type: roomData.type,
+                    rate: roomData.rate,
+                    description: roomData.description,
+                    status: 'available'
+                }])
+                .select();
+            
+            if (error) {
+                console.error('Error adding room:', error);
+                throw error;
+            }
+            
+            return data[0];
         }
 
         function openRoomModal() {
@@ -1369,8 +1408,8 @@
             }
         }
 
-        function renderRoomSummary() {
-            const rooms = getRoomInventory();
+        async function renderRoomSummary() {
+            const rooms = await getRoomInventory();
             const summaryList = document.getElementById('roomSummaryList');
             const groupedRooms = rooms.reduce((acc, room) => {
                 if (!acc[room.type]) {
@@ -1392,19 +1431,18 @@
         }
 
         // Assign room number to an existing booking (for old bookings without assignedRoom)
-        function assignRoomToBooking(booking) {
-            const existingBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+        async function assignRoomToBooking(booking, allBookings) {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
             console.log(`Assigning room for booking: ${booking.roomType}, ref: ${booking.referenceNumber}`);
 
             // Get all bookings for this room type that have assignedRoom
-            const typeBookings = existingBookings.filter(b => {
-                if (!b.assignedRoom || b.referenceNumber === booking.referenceNumber) return false;
-                const checkoutDate = new Date(b.checkout);
+            const typeBookings = allBookings.filter(b => {
+                if (!b.assignedRoom || b.reference_number === booking.reference_number) return false;
+                const checkoutDate = new Date(b.check_out);
                 checkoutDate.setHours(0, 0, 0, 0);
-                return b.roomType === booking.roomType && (checkoutDate > today);
+                return b.room_type === booking.room_type && (checkoutDate > today);
             });
 
             // Room prefixes
@@ -1416,10 +1454,10 @@
                 'dorm': 'DOR'
             };
 
-            const prefix = prefixes[booking.roomType] || 'STD';
-            const assignedRooms = typeBookings.map(b => b.assignedRoom);
+            const prefix = prefixes[booking.room_type] || 'STD';
+            const assignedRooms = typeBookings.map(b => b.assigned_room);
 
-            console.log(`Already assigned rooms for ${booking.roomType}:`, assignedRooms);
+            console.log(`Already assigned rooms for ${booking.room_type}:`, assignedRooms);
 
             // Find the next available room number (sequential per room type)
             for (let i = 1; i <= 5; i++) {
@@ -1434,33 +1472,44 @@
             return `${prefix}-1`;
         }
 
-        // Load booking data from localStorage and update dashboard
-        function loadBookingData() {
-            let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-            const roomInventory = getRoomInventory();
-
-            if (bookings.length === 0) {
-                bookings = getDefaultDemoBookings();
-                localStorage.setItem('bookings', JSON.stringify(bookings));
+        // Load booking data from Supabase and update dashboard
+        async function loadBookingData() {
+            const { data: bookings, error } = await supabaseClient
+                .from('bookings')
+                .select('*')
+                .order('check_in');
+            
+            if (error) {
+                console.error('Error fetching bookings:', error);
+                return;
             }
-            
-            console.log('Bookings before assignment:', bookings);
-            
-            // Assign room numbers to old bookings that don't have assignedRoom
-            bookings = bookings.map(booking => {
-                if (!booking.assignedRoom) {
-                    console.log(`Booking ${booking.referenceNumber} has no assignedRoom, assigning one...`);
-                    booking.assignedRoom = assignRoomToBooking(booking);
-                    console.log(`Assigned room: ${booking.assignedRoom}`);
+
+            const roomInventory = await getRoomInventory();
+
+            // Assign room numbers to bookings that don't have assigned_room
+            const bookingsWithRooms = await Promise.all(bookings.map(async (booking) => {
+                if (!booking.assigned_room) {
+                    console.log(`Booking ${booking.reference_number} has no assigned_room, assigning one...`);
+                    const assignedRoom = await assignRoomToBooking(booking, bookings);
+                    console.log(`Assigned room: ${assignedRoom}`);
+                    
+                    // Update the booking in Supabase
+                    const { error: updateError } = await supabaseClient
+                        .from('bookings')
+                        .update({ assigned_room: assignedRoom })
+                        .eq('id', booking.id);
+                    
+                    if (updateError) {
+                        console.error('Error updating booking with room:', updateError);
+                    }
+                    
+                    return { ...booking, assigned_room: assignedRoom };
                 }
                 return booking;
-            });
+            }));
             
-            // Save updated bookings back to localStorage
-            localStorage.setItem('bookings', JSON.stringify(bookings));
-            
-            console.log('Loaded bookings from localStorage:', bookings);
-            console.log('Total bookings:', bookings.length);
+            console.log('Loaded bookings from Supabase:', bookingsWithRooms);
+            console.log('Total bookings:', bookingsWithRooms.length);
 
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -1474,16 +1523,16 @@
             const totalRooms = roomInventory.length;
             const maintenanceRooms = roomInventory.filter(room => room.defaultStatus === 'maintenance').length;
 
-            bookings.forEach(booking => {
-                const checkinDate = new Date(booking.checkin);
-                const checkoutDate = new Date(booking.checkout);
+            bookingsWithRooms.forEach(booking => {
+                const checkinDate = new Date(booking.check_in);
+                const checkoutDate = new Date(booking.check_out);
                 checkinDate.setHours(0, 0, 0, 0);
                 checkoutDate.setHours(0, 0, 0, 0);
 
                 // Count occupied rooms (check-in <= today < check-out)
                 if (checkinDate <= today && today < checkoutDate) {
                     occupied++;
-                    totalGuests += parseInt(booking.guests);
+                    totalGuests += booking.guests;
                 }
                 // Count booked rooms (future check-ins)
                 else if (checkinDate > today && checkoutDate > today) {
@@ -1525,9 +1574,9 @@
             
             // Get date range from bookings to show actual guest presence
             const allDates = [];
-            bookings.forEach(booking => {
-                const checkinDate = new Date(booking.checkin);
-                const checkoutDate = new Date(booking.checkout);
+            bookingsWithRooms.forEach(booking => {
+                const checkinDate = new Date(booking.check_in);
+                const checkoutDate = new Date(booking.check_out);
                 checkinDate.setHours(0, 0, 0, 0);
                 checkoutDate.setHours(0, 0, 0, 0);
                 
@@ -1561,9 +1610,9 @@
                 labels.push(isToday ? 'Today' : isYesterday ? 'Yesterday' : date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
 
                 let dayGuests = 0;
-                bookings.forEach(booking => {
-                    const checkinDate = new Date(booking.checkin);
-                    const checkoutDate = new Date(booking.checkout);
+                bookingsWithRooms.forEach(booking => {
+                    const checkinDate = new Date(booking.check_in);
+                    const checkoutDate = new Date(booking.check_out);
                     checkinDate.setHours(0, 0, 0, 0);
                     checkoutDate.setHours(0, 0, 0, 0);
                     const checkDate = new Date(dateStr);
@@ -1571,7 +1620,7 @@
                     if (checkinDate <= checkDate && checkDate < checkoutDate) {
                         const guestCount = parseInt(booking.guests) || 0;
                         dayGuests += guestCount;
-                        console.log(`Day ${dateStr}: Adding ${guestCount} guests from booking ${booking.referenceNumber}`);
+                        console.log(`Day ${dateStr}: Adding ${guestCount} guests from booking ${booking.reference_number}`);
                     }
                 });
                 guestData.push(dayGuests);
@@ -1588,12 +1637,12 @@
             }
 
             // Update room cards with actual bookings
-            updateRoomCards(bookings, today, roomInventory);
+            updateRoomCards(bookingsWithRooms, today, roomInventory);
 
-            renderRoomSummary();
+            await renderRoomSummary();
 
             // Update recent activity
-            updateRecentActivity(bookings);
+            updateRecentActivity(bookingsWithRooms);
         }
 
         // Update recent activity section
@@ -1601,14 +1650,14 @@
             const activityList = document.querySelector('.activity-list');
             activityList.innerHTML = '';
 
-            // Sort bookings by booking date (most recent first)
+            // Sort bookings by created_at date (most recent first)
             const sortedBookings = [...bookings].sort((a, b) => {
-                return new Date(b.bookingDate) - new Date(a.bookingDate);
+                return new Date(b.created_at) - new Date(a.created_at);
             });
 
             // Show last 5 bookings
             sortedBookings.slice(0, 5).forEach(booking => {
-                const bookingDate = new Date(booking.bookingDate);
+                const bookingDate = new Date(booking.created_at);
                 const now = new Date();
                 const diffHours = Math.floor((now - bookingDate) / (1000 * 60 * 60));
                 let timeText;
@@ -1626,8 +1675,8 @@
                 activityItem.className = 'activity-item';
                 activityItem.innerHTML = `
                     <div class="activity-info">
-                        <h4>Booking: ${booking.fullName}</h4>
-                        <p>${booking.roomType.charAt(0).toUpperCase() + booking.roomType.slice(1)} - ${booking.paymentMethod}</p>
+                        <h4>Booking: ${booking.full_name}</h4>
+                        <p>${booking.room_type.charAt(0).toUpperCase() + booking.room_type.slice(1)} - ${booking.assigned_room || 'Pending'}</p>
                     </div>
                     <div class="activity-time">${timeText}</div>
                 `;
@@ -1661,11 +1710,11 @@
 
             // Find booking for this specific room number
             const booking = bookings.find(b => {
-                if (!b.assignedRoom) return false;
-                const checkinDate = new Date(b.checkin + 'T00:00:00');
-                const checkoutDate = new Date(b.checkout + 'T00:00:00');
+                if (!b.assigned_room) return false;
+                const checkinDate = new Date(b.check_in + 'T00:00:00');
+                const checkoutDate = new Date(b.check_out + 'T00:00:00');
                 // Match if the room is currently occupied or booked for future
-                const matches = b.assignedRoom === roomNumber && (checkinDate <= today && today < checkoutDate || checkinDate > today);
+                const matches = b.assigned_room === roomNumber && (checkinDate <= today && today < checkoutDate || checkinDate > today);
                 if (matches) {
                     console.log(`Found booking for room ${roomNumber}:`, b);
                 }
@@ -1673,8 +1722,8 @@
             });
 
             if (booking) {
-                const checkinDate = new Date(booking.checkin + 'T00:00:00');
-                const checkoutDate = new Date(booking.checkout + 'T00:00:00');
+                const checkinDate = new Date(booking.check_in + 'T00:00:00');
+                const checkoutDate = new Date(booking.check_out + 'T00:00:00');
                 
                 const isOccupied = checkinDate <= today && today < checkoutDate;
                 const status = isOccupied ? 'occupied' : 'booked';
@@ -1691,26 +1740,26 @@
                     <div class="room-body">
                         <span class="status-badge ${status}">${statusText}</span>
                         <div class="guest-info">
-                            <p><strong>Guest:</strong> ${booking.fullName}</p>
+                            <p><strong>Guest:</strong> ${booking.full_name}</p>
                             <p><strong>Contact:</strong> ${booking.phone}</p>
                             <p><strong>Rate:</strong> ₱${Number(room.rate).toLocaleString()} / night</p>
                         </div>
                         <div class="dates-info">
                             <div class="date-item">
                                 <label>Check-in</label>
-                                <span>${formatDate(booking.checkin)}</span>
+                                <span>${formatDate(booking.check_in)}</span>
                             </div>
                             <div class="date-item">
                                 <label>Check-out</label>
-                                <span>${formatDate(booking.checkout)}</span>
+                                <span>${formatDate(booking.check_out)}</span>
                             </div>
                         </div>
                     </div>
                     <div class="room-actions">
                         ${isOccupied ? 
                             (isCheckoutToday ? 
-                                `<button class="action-btn checkout" onclick="processCheckout('${booking.referenceNumber}')">Process Check-out</button>` : 
-                                `<button class="action-btn checkout" disabled>Check-out: ${formatDate(booking.checkout)}</button>`) 
+                                `<button class="action-btn checkout" onclick="processCheckout('${booking.reference_number}')">Process Check-out</button>` : 
+                                `<button class="action-btn checkout" disabled>Check-out: ${formatDate(booking.check_out)}</button>`) 
                             : `<button class="action-btn" disabled>Upcoming Booking</button>`}
                     </div>
                 `;
@@ -1744,19 +1793,27 @@
         }
 
         // Process checkout
-        function processCheckout(referenceNumber) {
+        async function processCheckout(referenceNumber) {
             if (confirm('Are you sure you want to process check-out for this booking?')) {
-                let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-                bookings = bookings.filter(b => b.referenceNumber !== referenceNumber);
-                localStorage.setItem('bookings', JSON.stringify(bookings));
+                const { error } = await supabaseClient
+                    .from('bookings')
+                    .update({ status: 'checked_out' })
+                    .eq('reference_number', referenceNumber);
+                
+                if (error) {
+                    console.error('Error processing checkout:', error);
+                    alert('Error processing checkout. Please try again.');
+                    return;
+                }
+                
                 loadBookingData(); // Refresh dashboard
             }
         }
 
-        document.getElementById('roomForm').addEventListener('submit', function(event) {
+        document.getElementById('roomForm').addEventListener('submit', async function(event) {
             event.preventDefault();
 
-            const rooms = getRoomInventory();
+            const rooms = await getRoomInventory();
             const formData = new FormData(event.target);
             const roomNumber = formData.get('roomNumber').trim().toUpperCase();
 
@@ -1766,19 +1823,24 @@
             }
 
             const roomTypeKey = formData.get('roomTypeKey');
-            rooms.push({
+            const roomData = {
                 roomNumber,
                 type: roomTypeKey,
                 name: roomTypeLabels[roomTypeKey],
                 rate: Number(formData.get('roomRate')),
                 description: formData.get('roomDescription').trim(),
                 defaultStatus: formData.get('roomStatus')
-            });
+            };
 
-            saveRoomInventory(rooms);
-            event.target.reset();
-            closeRoomModal();
-            loadBookingData();
+            try {
+                await addRoomToSupabase(roomData);
+                event.target.reset();
+                closeRoomModal();
+                loadBookingData();
+            } catch (error) {
+                console.error('Error adding room:', error);
+                alert('Error adding room. Please try again.');
+            }
         });
 
         // Initialize charts
@@ -1936,9 +1998,9 @@
         }
 
         // Load booking data on page load
-        window.onload = function() {
+        window.onload = async function() {
             initializeCharts();
-            loadBookingData();
+            await loadBookingData();
         };
     </script>
 </body>

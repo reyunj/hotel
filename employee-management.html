@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Management - Tagboanan Beach Resort</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -277,52 +279,35 @@
         </div>
     </main>
     <script>
-        const employees = [
-            {
-                name: 'Maria Santos',
-                role: 'Front Desk Officer',
-                employmentType: 'Monthly',
-                attendanceDays: 24,
-                lateCount: 1,
-                absentDays: 0,
-                dailyRate: 850,
-                monthlySalary: 22100,
-                status: 'Good Standing'
-            },
-            {
-                name: 'John dela Cruz',
-                role: 'Kitchen Staff',
-                employmentType: 'Daily',
-                attendanceDays: 22,
-                lateCount: 2,
-                absentDays: 1,
-                dailyRate: 780,
-                monthlySalary: 17160,
-                status: 'Review Attendance'
-            },
-            {
-                name: 'Elaine Ramos',
-                role: 'Housekeeping',
-                employmentType: 'Daily',
-                attendanceDays: 23,
-                lateCount: 0,
-                absentDays: 0,
-                dailyRate: 700,
-                monthlySalary: 16100,
-                status: 'Good Standing'
-            },
-            {
-                name: 'Paolo Reyes',
-                role: 'Maintenance',
-                employmentType: 'Monthly',
-                attendanceDays: 21,
-                lateCount: 3,
-                absentDays: 1,
-                dailyRate: 900,
-                monthlySalary: 23400,
-                status: 'Needs Follow-up'
+        let employees = [];
+        
+        async function loadEmployees() {
+            const { data, error } = await supabaseClient
+                .from('employees')
+                .select('*')
+                .order('name');
+            
+            if (error) {
+                console.error('Error fetching employees:', error);
+                return;
             }
-        ];
+            
+            // Transform Supabase data to match expected format
+            employees = data.map(emp => ({
+                name: emp.full_name,
+                role: emp.position,
+                employmentType: emp.employment_type,
+                attendanceDays: emp.attendance_days || 22,
+                lateCount: emp.late_count || 0,
+                absentDays: emp.absent_days || 0,
+                dailyRate: emp.daily_rate,
+                monthlySalary: emp.monthly_salary,
+                status: emp.status || 'Good Standing'
+            }));
+            
+            renderPage();
+        }
+        
         function peso(value) { return `₱${Number(value).toLocaleString()}`; }
         function renderPage() {
             const totalEmployees = employees.length;
@@ -388,7 +373,7 @@
             const mobileMenu = document.getElementById('mobileMenu');
             mobileMenu.classList.toggle('active');
         }
-        renderPage();
+        window.onload = loadEmployees;
     </script>
 </body>
 </html>

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Menu Admin - Tagboanan Beach Resort</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
     <style>
         * {
             margin: 0;
@@ -577,51 +579,22 @@
     </main>
 
     <script>
-        const defaultFoodMenus = [
-            {
-                id: 1,
-                name: 'Seafood Bilao',
-                category: 'Main Course',
-                price: 1299,
-                image: 'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=80',
-                availability: 'available',
-                description: 'Good for 4-6 guests with grilled shrimp, crab, mussels, rice, and dipping sauces.'
-            },
-            {
-                id: 2,
-                name: 'Grilled Pork BBQ Skewers',
-                category: 'Grilled',
-                price: 220,
-                image: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=1200&q=80',
-                availability: 'available',
-                description: 'Sweet and smoky grilled skewers, ideal for beachside snacking.'
-            },
-            {
-                id: 3,
-                name: 'Fresh Mango Shake',
-                category: 'Beverages',
-                price: 150,
-                image: 'https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?auto=format&fit=crop&w=1200&q=80',
-                availability: 'unavailable',
-                description: 'Chilled tropical mango shake served in a tall glass.'
+        async function getFoodMenus() {
+            const { data, error } = await supabaseClient
+                .from('food_menu')
+                .select('*')
+                .order('id');
+            
+            if (error) {
+                console.error('Error fetching food menus:', error);
+                return [];
             }
-        ];
-
-        function getFoodMenus() {
-            const storedMenus = localStorage.getItem('foodMenus');
-            if (!storedMenus) {
-                localStorage.setItem('foodMenus', JSON.stringify(defaultFoodMenus));
-                return [...defaultFoodMenus];
-            }
-            return JSON.parse(storedMenus);
+            
+            return data;
         }
 
-        function saveFoodMenus(menus) {
-            localStorage.setItem('foodMenus', JSON.stringify(menus));
-        }
-
-        function renderFoodMenus() {
-            const menus = getFoodMenus();
+        async function renderFoodMenus() {
+            const menus = await getFoodMenus();
             const foodGrid = document.getElementById('foodGrid');
             const totalItems = document.getElementById('totalItems');
             const availableItems = document.getElementById('availableItems');
@@ -633,7 +606,7 @@
             availableItems.textContent = menus.filter(item => item.availability === 'available').length;
             unavailableItems.textContent = menus.filter(item => item.availability === 'unavailable').length;
             categoryCount.textContent = new Set(menus.map(item => item.category)).size;
-            menuMeta.textContent = 'Click each card button to simulate changing dish availability for the demo.';
+            menuMeta.textContent = 'Click each card button to toggle dish availability.';
 
             foodGrid.innerHTML = '';
 
@@ -659,27 +632,33 @@
             });
         }
 
-        function toggleAvailability(id) {
-            const menus = getFoodMenus().map(item => {
-                if (item.id === id) {
-                    return {
-                        ...item,
-                        availability: item.availability === 'available' ? 'unavailable' : 'available'
-                    };
-                }
-                return item;
-            });
-            saveFoodMenus(menus);
+        async function toggleAvailability(id) {
+            const menus = await getFoodMenus();
+            const item = menus.find(m => m.id === id);
+            
+            if (!item) return;
+
+            const newAvailability = item.availability === 'available' ? 'unavailable' : 'available';
+            
+            const { error } = await supabaseClient
+                .from('food_menu')
+                .update({ availability: newAvailability })
+                .eq('id', id);
+            
+            if (error) {
+                console.error('Error updating availability:', error);
+                alert('Error updating availability. Please try again.');
+                return;
+            }
+            
             renderFoodMenus();
         }
 
-        document.getElementById('foodMenuForm').addEventListener('submit', function(event) {
+        document.getElementById('foodMenuForm').addEventListener('submit', async function(event) {
             event.preventDefault();
 
-            const menus = getFoodMenus();
             const formData = new FormData(event.target);
             const newItem = {
-                id: Date.now(),
                 name: formData.get('foodName'),
                 category: formData.get('foodCategory'),
                 price: Number(formData.get('foodPrice')),
@@ -688,8 +667,16 @@
                 description: formData.get('foodDescription')
             };
 
-            menus.unshift(newItem);
-            saveFoodMenus(menus);
+            const { error } = await supabaseClient
+                .from('food_menu')
+                .insert([newItem]);
+            
+            if (error) {
+                console.error('Error adding menu item:', error);
+                alert('Error adding menu item. Please try again.');
+                return;
+            }
+
             event.target.reset();
             renderFoodMenus();
         });
@@ -707,7 +694,8 @@
             hamburger.classList.toggle('active');
         }
 
-        renderFoodMenus();
+        // Initialize
+        window.onload = renderFoodMenus;
     </script>
 </body>
 </html>
