@@ -6,6 +6,7 @@
 
 - Added a room setup form in `admin.html` so admins can create new room details in the demo dashboard.
 - Added seeded demo booking data in `admin.html` so the dashboard shows sample values for occupied rooms, check-ins today, and total guests on first load.
+- Added CSV export for the inventory list in `inventory.html` so admins can download the visible inventory items.
 - Added `food-menu.html` as a separate admin page for demo food menu management.
 - Added `active-orders.html` as a separate admin page for demo active food order tracking.
 - Added `reports.html` as a separate admin reporting page for food revenue, room revenue, inventory expenses, salary expenses, and estimated net income.
@@ -49,6 +50,13 @@
 - This makes the `Occupied`, `Check-ins Today`, and `Total Guests` cards show realistic sample values instead of staying empty.
 - Once real demo bookings exist in `localStorage`, the dashboard continues using those stored bookings.
 
+### Inventory Export Demo Flow
+
+- Admin opens `inventory.html` and clicks the `Export CSV` button.
+- The export reads the currently visible inventory items from the page.
+- The browser downloads a CSV file with category, item name, description, quantity, and status.
+- Newly added inventory items are included because the export uses the same DOM list the admin sees.
+
 ### Active Orders Demo Flow
 
 - Admin or staff opens `Active Orders` from the admin navigation.
@@ -62,6 +70,7 @@
 - `admin.html` now separates room inventory data from booking data so admins can add rooms without changing booking records directly.
 - The room creation experience now uses a modal popup so the dashboard stays cleaner and the form only appears when the admin needs it.
 - The dashboard stats still use the existing calculation logic, but now start with seeded demo bookings so the top KPI cards are useful in a fresh session.
+- `inventory.html` exports from the rendered inventory list instead of a separate data source, which keeps the CSV aligned with what the admin currently sees on screen.
 - The new food-related features were split into separate HTML pages to match the existing admin navigation pattern used by `inventory.html`.
 - `food-menu.html` uses front-end-only state with `localStorage` so users can add and toggle menu items without a database.
 - `active-orders.html` uses static JavaScript data to simulate the kitchen workflow and staff reference view.

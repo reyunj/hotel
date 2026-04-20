@@ -281,6 +281,12 @@
             align-items: center;
         }
 
+        .section-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
         .add-btn {
             padding: 10px 20px;
             background: var(--primary);
@@ -294,7 +300,27 @@
         }
 
         .add-btn:hover {
-            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .export-btn {
+            background: white;
+            color: var(--primary);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.08);
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(99, 102, 241, 0.45);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.12);
         }
 
         .category-grid {
@@ -874,7 +900,10 @@
 
         <div class="section-title">
             <h2>Room Supplies</h2>
-            <button class="add-btn">+ Add Item</button>
+            <div class="section-actions">
+                <button class="export-btn" type="button" onclick="exportInventoryToCSV()">Export CSV</button>
+                <button class="add-btn" type="button">+ Add Item</button>
+            </div>
         </div>
 
         <div class="category-grid">
@@ -1219,6 +1248,56 @@
             if (confirm('Are you sure you want to logout?')) {
                 window.location.href = 'index.html';
             }
+        }
+
+        function escapeCSVValue(value) {
+            const normalized = String(value ?? '').replace(/"/g, '""');
+            return `"${normalized}"`;
+        }
+
+        function getInventoryRows() {
+            const rows = [];
+            const categoryCards = document.querySelectorAll('.category-card');
+
+            categoryCards.forEach(card => {
+                const categoryName = card.querySelector('.category-header h3')?.textContent.trim() || 'Uncategorized';
+                const inventoryItems = card.querySelectorAll('.inventory-item');
+
+                inventoryItems.forEach(item => {
+                    const itemName = item.querySelector('.item-info h4')?.textContent.trim() || '';
+                    const description = item.querySelector('.item-info p')?.textContent.trim() || '';
+                    const quantity = item.querySelector('.quantity')?.textContent.trim() || '0';
+                    const status = item.querySelector('.status')?.textContent.trim() || '';
+
+                    rows.push([categoryName, itemName, description, quantity, status]);
+                });
+            });
+
+            return rows;
+        }
+
+        function exportInventoryToCSV() {
+            const rows = getInventoryRows();
+
+            if (rows.length === 0) {
+                alert('No inventory items available to export.');
+                return;
+            }
+
+            const header = ['Category', 'Item Name', 'Description', 'Quantity', 'Status'];
+            const csvLines = [header, ...rows].map(row => row.map(escapeCSVValue).join(','));
+            const csvContent = csvLines.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const downloadUrl = URL.createObjectURL(blob);
+            const downloadLink = document.createElement('a');
+            const timestamp = new Date().toISOString().slice(0, 10);
+
+            downloadLink.href = downloadUrl;
+            downloadLink.download = `inventory-export-${timestamp}.csv`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(downloadUrl);
         }
 
         // Modal functionality
