@@ -162,6 +162,7 @@
         .item-head {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             gap: 1rem;
             flex-wrap: wrap;
             margin-bottom: 0.6rem;
@@ -293,17 +294,25 @@
             }
             
             // Transform Supabase data to match expected format
-            employees = data.map(emp => ({
-                name: emp.full_name,
-                role: emp.position,
-                employmentType: emp.employment_type,
-                attendanceDays: emp.attendance_days || 22,
-                lateCount: emp.late_count || 0,
-                absentDays: emp.absent_days || 0,
-                dailyRate: emp.daily_rate,
-                monthlySalary: emp.monthly_salary,
-                status: emp.status || 'Good Standing'
-            }));
+            employees = data.map(emp => {
+                // Map status values
+                let displayStatus = 'Good Standing';
+                if (emp.late_count >= 3 || emp.absent_days >= 1) {
+                    displayStatus = emp.late_count >= 3 ? 'Needs Follow-up' : 'Review Attendance';
+                }
+                
+                return {
+                    name: emp.name,
+                    role: emp.role,
+                    employmentType: emp.employment_type,
+                    attendanceDays: emp.attendance_days || 22,
+                    lateCount: emp.late_count || 0,
+                    absentDays: emp.absent_days || 0,
+                    dailyRate: emp.daily_rate,
+                    monthlySalary: emp.monthly_salary,
+                    status: displayStatus
+                };
+            });
             
             renderPage();
         }
@@ -373,7 +382,14 @@
             const mobileMenu = document.getElementById('mobileMenu');
             mobileMenu.classList.toggle('active');
         }
-        window.onload = loadEmployees;
+        window.addEventListener('DOMContentLoaded', async function() {
+            console.log('Employee management page loaded, initializing...');
+            if (typeof supabaseClient === 'undefined') {
+                console.error('Supabase client not initialized');
+                return;
+            }
+            await loadEmployees();
+        });
     </script>
 </body>
 </html>

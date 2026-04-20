@@ -695,7 +695,14 @@
         }
 
         // Initialize
-        window.onload = renderFoodMenus;
+        window.addEventListener('DOMContentLoaded', async function() {
+            console.log('Food menu page loaded, initializing...');
+            if (typeof supabaseClient === 'undefined') {
+                console.error('Supabase client not initialized');
+                return;
+            }
+            await renderFoodMenus();
+        });
     </script>
 </body>
 </html>

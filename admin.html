@@ -1998,10 +1998,15 @@
         }
 
         // Load booking data on page load
-        window.onload = async function() {
+        window.addEventListener('DOMContentLoaded', async function() {
+            console.log('Page loaded, initializing...');
+            if (typeof supabaseClient === 'undefined') {
+                console.error('Supabase client not initialized');
+                return;
+            }
             initializeCharts();
             await loadBookingData();
-        };
+        });
     </script>
 </body>
 </html>

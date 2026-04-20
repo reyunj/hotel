@@ -597,7 +597,14 @@
         }
 
         // Initialize
-        window.onload = loadOrders;
+        window.addEventListener('DOMContentLoaded', async function() {
+            console.log('Active orders page loaded, initializing...');
+            if (typeof supabaseClient === 'undefined') {
+                console.error('Supabase client not initialized');
+                return;
+            }
+            await loadOrders();
+        });
     </script>
 </body>
 </html>

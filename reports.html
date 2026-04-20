@@ -550,7 +550,14 @@
             const mobileMenu = document.getElementById('mobileMenu');
             mobileMenu.classList.toggle('active');
         }
-        window.onload = loadReportData;
+        window.addEventListener('DOMContentLoaded', async function() {
+            console.log('Reports page loaded, initializing...');
+            if (typeof supabaseClient === 'undefined') {
+                console.error('Supabase client not initialized');
+                return;
+            }
+            await loadReportData();
+        });
     </script>
 </body>
 </html>

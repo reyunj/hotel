@@ -1185,8 +1185,15 @@
             hamburger.classList.toggle('active');
         }
 
-        // Load inventory on page load
-        window.onload = loadInventory;
+        // Load inventory
+        window.addEventListener('DOMContentLoaded', async function() {
+            console.log('Inventory page loaded, initializing...');
+            if (typeof supabaseClient === 'undefined') {
+                console.error('Supabase client not initialized');
+                return;
+            }
+            await loadInventory();
+        });
     </script>
 </body>
 </html>
