@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Tagboanan Beach Resort</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin-layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
+    <script src="access-control.js"></script>
     <style>
         * {
             margin: 0;
@@ -28,211 +30,17 @@
             --white: #ffffff;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.7;
-            color: var(--text-dark);
-            background: var(--cream);
-            min-height: 100vh;
-        }
-
-        nav {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 3rem;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            text-decoration: none;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .nav-btn {
-            padding: 10px 20px;
-            background: white;
-            color: var(--text-dark);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            border: 2px solid #e2e8f0;
-        }
-
-        .nav-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .nav-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .nav-link {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--primary);
-        }
-
-        .nav-actions a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-actions a:hover {
-            color: var(--primary);
-        }
-
-        .logout-btn {
-            padding: 8px;
-            background: transparent;
-            color: var(--text-dark);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logout-btn:hover {
-            transform: translateY(-1px);
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 6px;
-            z-index: 1002;
-            padding: 10px;
-            margin-left: 1rem;
-        }
-
-        .hamburger span {
-            width: 30px;
-            height: 4px;
-            background: var(--text-dark);
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            display: block;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 70px;
-            left: 0;
-            width: 100%;
-            background: white;
-            padding: 2rem;
-            z-index: 999;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-
-        .mobile-menu.active {
-            display: block;
-        }
-
-        .mobile-menu ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .mobile-menu a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.1rem;
-            transition: color 0.3s ease;
-        }
-
-        .mobile-menu a:hover {
-            color: var(--primary);
-        }
-
-        .person-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .person-icon:hover {
-            background: var(--secondary);
-        }
-
-        .dashboard {
-            padding: 8rem 3rem 3rem;
+        .dashboard-content {
             max-width: 1400px;
             margin: 0 auto;
         }
 
         .header {
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
             color: var(--text-dark);
             margin-bottom: 0.5rem;
@@ -240,7 +48,7 @@
 
         .header p {
             color: var(--text-light);
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .stats-grid {
@@ -796,10 +604,6 @@
         }
 
         @media (max-width: 768px) {
-            .dashboard {
-                padding: 6rem 1.5rem 3rem;
-            }
-
             .stats-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
@@ -813,33 +617,8 @@
                 font-size: 2rem;
             }
 
-            .nav-buttons {
-                display: none;
-            }
-
-            .nav-actions span {
-                display: none;
-            }
-
-            .logout-btn {
-                display: none;
-            }
-
-            .hamburger {
-                display: flex !important;
-                margin-left: 0;
-            }
-
-            .nav-container {
-                padding: 0 1.5rem;
-            }
-
-            .logo {
-                font-size: 1.2rem;
-            }
-
             .header h1 {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
             }
 
             .header p {
@@ -933,171 +712,85 @@
                 font-size: 0.8rem;
             }
         }
-
-        @media (max-width: 480px) {
-            .dashboard {
-                padding: 5rem 1rem 2rem;
-            }
-
-            .nav-container {
-                padding: 0 1rem;
-            }
-
-            .logo {
-                font-size: 1rem;
-            }
-
-            .header h1 {
-                font-size: 1.5rem;
-            }
-
-            .header p {
-                font-size: 0.9rem;
-            }
-
-            .stat-card {
-                padding: 1.25rem;
-            }
-
-            .stat-card h3 {
-                font-size: 0.8rem;
-            }
-
-            .stat-card .value {
-                font-size: 1.8rem;
-            }
-
-            .section-title {
-                font-size: 1.1rem;
-            }
-
-            .filter-btn {
-                padding: 6px 12px;
-                font-size: 0.8rem;
-            }
-
-            .room-header {
-                padding: 1rem;
-            }
-
-            .room-header h3 {
-                font-size: 1rem;
-            }
-
-            .room-type {
-                font-size: 0.8rem;
-            }
-
-            .room-body {
-                padding: 1rem;
-            }
-
-            .status-badge {
-                padding: 4px 10px;
-                font-size: 0.7rem;
-            }
-
-            .guest-info p {
-                font-size: 0.8rem;
-            }
-
-            .dates-info {
-                grid-template-columns: 1fr;
-                gap: 0.5rem;
-            }
-
-            .date-item {
-                font-size: 0.75rem;
-            }
-
-            .room-actions {
-                padding: 0.75rem 1rem;
-            }
-
-            .action-btn {
-                padding: 8px;
-                font-size: 0.75rem;
-            }
-
-            .chart-card {
-                padding: 1.25rem;
-            }
-
-            .chart-card h3 {
-                font-size: 1rem;
-            }
-
-            .chart-container {
-                height: 200px;
-            }
-
-            .recent-activity {
-                padding: 1.25rem;
-            }
-
-            .activity-info h4 {
-                font-size: 0.9rem;
-            }
-
-            .activity-info p {
-                font-size: 0.8rem;
-            }
-
-            .activity-time {
-                font-size: 0.75rem;
-            }
-
-            .logout-btn {
-                display: none;
-            }
-        }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="nav-container">
-            <a href="admin.html" class="logo">Tagboananan Admin</a>
-            <div class="nav-buttons">
-                <a href="admin.html" class="nav-btn active">Dashboard</a>
-                <a href="inventory.html" class="nav-btn">Inventory</a>
-                <a href="food-menu.html" class="nav-btn">Food Menu</a>
-                <a href="active-orders.html" class="nav-btn">Active Orders</a>
-                <a href="reports.html" class="nav-btn">Reports</a>
-                <a href="employee-management.html" class="nav-btn">Employee</a>
-            </div>
-            <div class="nav-actions">
-                <span>👤 Admin</span>
-                <a href="index.html" onclick="handleLogout(event)" class="logout-btn">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6.5C2 4.01472 4.01472 2 6.5 2H12C14.2091 2 16 3.79086 16 6V7C16 7.55228 15.5523 8 15 8C14.4477 8 14 7.55228 14 7V6C14 4.89543 13.1046 4 12 4H6.5C5.11929 4 4 5.11929 4 6.5V17.5C4 18.8807 5.11929 20 6.5 20H12C13.1046 20 14 19.1046 14 18V17C14 16.4477 14.4477 16 15 16C15.5523 16 16 16.4477 16 17V18C16 20.2091 14.2091 22 12 22H6.5C4.01472 22 2 19.9853 2 17.5V6.5ZM18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289L22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071C17.9024 15.3166 17.9024 14.6834 18.2929 14.2929L19.5858 13L11 13C10.4477 13 10 12.5523 10 12C10 11.4477 10.4477 11 11 11L19.5858 11L18.2929 9.70711C17.9024 9.31658 17.9024 8.68342 18.2929 8.29289Z" fill="#1e293b"></path>
-                    </svg>
-                </a>
-            </div>
-            <div class="hamburger" onclick="toggleMobileMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+    <!-- Sidebar Toggle (Mobile) -->
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M3 5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5ZM5 5V19H19V5H5Z" fill="#1e293b"/>
+        </svg>
+        <span>Menu</span>
+    </button>
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="admin.html" class="sidebar-logo">
+                <span>🏨</span>
+                <span>Tagboanan Admin</span>
+            </a>
         </div>
-    </nav>
 
-    <div class="mobile-menu" id="mobileMenu">
-        <ul>
-            <li><a href="admin.html" onclick="toggleMobileMenu()" class="active">Dashboard</a></li>
-            <li><a href="inventory.html" onclick="toggleMobileMenu()">Inventory</a></li>
-            <li><a href="food-menu.html" onclick="toggleMobileMenu()">Food Menu</a></li>
-            <li><a href="active-orders.html" onclick="toggleMobileMenu()">Active Orders</a></li>
-            <li><a href="reports.html" onclick="toggleMobileMenu()">Reports</a></li>
-            <li><a href="employee-management.html" onclick="toggleMobileMenu()">Employee</a></li>
-        </ul>
-    </div>
+        <nav class="sidebar-nav">
+            <a href="admin.html" class="nav-item active" data-page="admin.html">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="inventory.html" class="nav-item" data-page="inventory.html">
+                <span class="nav-icon">📦</span>
+                <span>Inventory</span>
+            </a>
+            <a href="food-menu.html" class="nav-item" data-page="food-menu.html">
+                <span class="nav-icon">🍽️</span>
+                <span>Food Menu</span>
+            </a>
+            <a href="active-orders.html" class="nav-item" data-page="active-orders.html">
+                <span class="nav-icon">👨‍🍳</span>
+                <span>Active Orders</span>
+            </a>
+            <a href="reports.html" class="nav-item" data-page="reports.html">
+                <span class="nav-icon">📈</span>
+                <span>Reports</span>
+            </a>
+            <a href="employee-management.html" class="nav-item" data-page="employee-management.html">
+                <span class="nav-icon">👥</span>
+                <span>Employee</span>
+            </a>
+            <a href="user-management.html" class="nav-item" data-page="user-management.html">
+                <span class="nav-icon">🔐</span>
+                <span>User Management</span>
+            </a>
+        </nav>
 
-    <div class="dashboard">
-        <div class="header">
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">👤</div>
+                <div class="user-details">
+                    <div class="user-name">Admin</div>
+                    <div class="user-role">Super Admin</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="handleLogout(event)">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6.5C2 4.01472 4.01472 2 6.5 2H12C14.2091 2 16 3.79086 16 6V7C16 7.55228 15.5523 8 15 8C14.4477 8 14 7.55228 14 7V6C14 4.89543 13.1046 4 12 4H6.5C5.11929 4 4 5.11929 4 6.5V17.5C4 18.8807 5.11929 20 6.5 20H12C13.1046 20 14 19.1046 14 18V17C14 16.4477 14.4477 16 15 16C15.5523 16 16 16.4477 16 17V18C16 20.2091 14.2091 22 12 22H6.5C4.01472 22 2 19.9853 2 17.5V6.5ZM18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289L22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071C17.9024 15.3166 17.9024 14.6834 18.2929 14.2929L19.5858 13L11 13C10.4477 13 10 12.5523 10 12C10 11.4477 10.4477 11 11 11L19.5858 11L18.2929 9.70711C17.9024 9.31658 17.9024 8.68342 18.2929 8.29289Z" fill="#1e293b"/>
+                </svg>
+                <span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <div class="admin-header">
             <h1>Admin Dashboard</h1>
             <p>Manage room occupancy and guest check-ins</p>
         </div>
 
+        <div class="dashboard-content">
         <div class="section-title with-action">
             <h2>Room Setup</h2>
             <button class="open-room-modal-btn" type="button" onclick="openRoomModal()">Add Room</button>
@@ -1232,6 +925,8 @@
             </form>
         </div>
     </div>
+    </div>
+    </main>
 
     <script>
         const defaultRoomInventory = [
@@ -1991,11 +1686,11 @@
             }
         });
 
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            const hamburger = document.querySelector('.hamburger');
-            mobileMenu.classList.toggle('active');
-            hamburger.classList.toggle('active');
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
         }
 
         // Load booking data on page load

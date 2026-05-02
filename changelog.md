@@ -1,5 +1,95 @@
 # Changelog
 
+## 2026-05-02 (Part 2)
+
+### Sidebar Navigation Layout
+
+- Replaced header navigation with modern side panel menu across all admin pages.
+- Created `admin-layout.css` with responsive sidebar layout system.
+- Updated all admin pages (admin.html, inventory.html, food-menu.html, active-orders.html, reports.html, employee-management.html, user-management.html) to use sidebar navigation.
+- Added mobile-responsive sidebar with toggle button and overlay.
+- Improved navigation UX with icons, active states, and user profile section.
+- Cleaned up navigation-related CSS and responsive styles.
+
+### Layout Changes
+
+- **Sidebar**: Fixed 260px width on desktop, slide-out on mobile
+- **Main Content**: Adjusted to work with sidebar layout (margin-left: 260px on desktop)
+- **Mobile**: Sidebar collapses by default, toggles via hamburger menu button
+- **Navigation Items**: Added emoji icons for visual clarity
+- **User Section**: Added user profile display with role in sidebar footer
+- **Responsive**: Improved mobile experience with proper overlay and transitions
+
+### Benefits
+
+- Solves navigation crowding issue with 7+ admin pages
+- Provides cleaner, more modern admin interface
+- Better use of horizontal space for content
+- Improved mobile navigation experience
+- Consistent navigation across all admin pages
+- Easier to scale with additional pages in the future
+
+### Notes for Junior Developers
+
+- All admin pages now share the same sidebar layout via `admin-layout.css`
+- Sidebar toggle functionality handled by `toggleSidebar()` JavaScript function
+- Active page highlighting handled via `active` class on nav items
+- Access control integration maintained - navigation items hidden based on permissions
+- Mobile breakpoint at 1024px switches from fixed sidebar to slide-out drawer
+- Overlay appears on mobile when sidebar is open to dismiss when clicking outside
+
+## 2026-05-02 (Part 1)
+
+### Role-Based Access Control (RBAC) System
+
+- Implemented complete role-based access control system for admin panel.
+- Created `supabase-setup-rbac.sql` script for database table creation.
+- Added new Supabase tables: `roles`, `role_permissions`, `users`.
+- Created `user-management.html` page for role and user management.
+- Implemented `access-control.js` middleware for permission checking.
+- Added access control to all admin pages (admin.html, inventory.html, food-menu.html, active-orders.html, reports.html, employee-management.html).
+- Updated navigation across all admin pages to include "User Management" link.
+
+### Database Schema
+
+- **roles**: Stores custom role definitions (id, name, description, created_at)
+- **role_permissions**: Maps roles to page access permissions (role_id, page_name, can_access)
+- **users**: Stores user accounts with role assignments (id, email, full_name, role_id, password_hash, created_at)
+
+### User Management Features
+
+- Role creation with custom name and description
+- Page access permission checkboxes for each role (Dashboard, Inventory, Food Menu, Active Orders, Reports, Employee, User Management)
+- User creation with email, full name, password, and role assignment
+- Role list view with delete functionality
+- User list view with role display and delete functionality
+- Demo login/logout functions for testing access control
+
+### Access Control Implementation
+
+- Access control middleware checks user role permissions on page load
+- Navigation links automatically hidden based on user permissions
+- Unauthorized page access redirects to dashboard with alert
+- Demo mode defaults to full access when no user is logged in
+- Permissions loaded dynamically from Supabase based on user role
+
+### Demo Setup
+
+- SQL script creates default "Super Admin" role with all page permissions
+- Default admin user (admin@tagboanan.com / admin123) created for testing
+- RLS policies set to allow all operations for demo purposes
+- Access control defaults to per-page restriction as requested for demo stage
+
+### Notes for Junior Developers
+
+- Run `supabase-setup-rbac.sql` in Supabase SQL Editor to create RBAC tables
+- Access control is implemented at page level (demo stage) - can be extended to action-level permissions later
+- The system uses localStorage for demo user session management
+- In production, replace localStorage with proper authentication (Supabase Auth)
+- Password hashing is not implemented in demo (plain text storage) - add bcrypt for production
+- The `access-control.js` file is included in all admin pages after `supabase-config.js`
+- Navigation filtering happens automatically on page load via `filterNavigationLinks()` function
+
 ## 2026-04-20
 
 ### Supabase Integration

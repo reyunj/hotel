@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Tagboanan Beach Resort</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin-layout.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0ea5e9;
+            --secondary: #0284c7;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --cream: #faf8f5;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: var(--cream);
+            min-height: 100vh;
+        }
+        .main-content {
+            padding: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            margin-bottom: 3rem;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .card h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 0.9rem 1rem;
+            font: inherit;
+            color: var(--text-dark);
+            background: #fff;
+        }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 0.95rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--secondary);
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        .list-section {
+            margin-top: 3rem;
+        }
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .list-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .data-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .data-table tr:hover {
+            background: #f8fafc;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-role {
+            background: #dbeafe;
+            color: #075985;
+        }
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .action-btn.edit {
+            background: var(--primary);
+            color: white;
+        }
+        .action-btn.delete {
+            background: var(--danger);
+            color: white;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+        @media (max-width: 1024px) {
+            .section-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 6rem 1.5rem 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Toggle (Mobile) -->
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M3 5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5ZM5 5V19H19V5H5Z" fill="#1e293b"/>
+        </svg>
+        <span>Menu</span>
+    </button>
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="admin.html" class="sidebar-logo">
+                <span>🏨</span>
+                <span>Tagboanan Admin</span>
+            </a>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="admin.html" class="nav-item" data-page="admin.html">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="inventory.html" class="nav-item" data-page="inventory.html">
+                <span class="nav-icon">📦</span>
+                <span>Inventory</span>
+            </a>
+            <a href="food-menu.html" class="nav-item" data-page="food-menu.html">
+                <span class="nav-icon">🍽️</span>
+                <span>Food Menu</span>
+            </a>
+            <a href="active-orders.html" class="nav-item" data-page="active-orders.html">
+                <span class="nav-icon">👨‍🍳</span>
+                <span>Active Orders</span>
+            </a>
+            <a href="reports.html" class="nav-item" data-page="reports.html">
+                <span class="nav-icon">📈</span>
+                <span>Reports</span>
+            </a>
+            <a href="employee-management.html" class="nav-item" data-page="employee-management.html">
+                <span class="nav-icon">👥</span>
+                <span>Employee</span>
+            </a>
+            <a href="user-management.html" class="nav-item active" data-page="user-management.html">
+                <span class="nav-icon">🔐</span>
+                <span>User Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">👤</div>
+                <div class="user-details">
+                    <div class="user-name">Admin</div>
+                    <div class="user-role">Super Admin</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="handleLogout(event)">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6.5C2 4.01472 4.01472 2 6.5 2H12C14.2091 2 16 3.79086 16 6V7C16 7.55228 15.5523 8 15 8C14.4477 8 14 7.55228 14 7V6C14 4.89543 13.1046 4 12 4H6.5C5.11929 4 4 5.11929 4 6.5V17.5C4 18.8807 5.11929 20 6.5 20H12C13.1046 20 14 19.1046 14 18V17C14 16.4477 14.4477 16 15 16C15.5523 16 16 16.4477 16 17V18C16 20.2091 14.2091 22 12 22H6.5C4.01472 22 2 19.9853 2 17.5V6.5ZM18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289L22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071C17.9024 15.3166 17.9024 14.6834 18.2929 14.2929L19.5858 13L11 13C10.4477 13 10 12.5523 10 12C10 11.4477 10.4477 11 11 11L19.5858 11L18.2929 9.70711C17.9024 9.31658 17.9024 8.68342 18.2929 8.29289Z" fill="#1e293b"/>
+                </svg>
+                <span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <div class="main-content">
+        <div class="header">
+            <h1>User Management</h1>
+            <p>Create roles, assign permissions, and manage user access</p>
+        </div>
+
+        <div class="section-grid">
+            <div class="card">
+                <h2>Create Role</h2>
+                <form id="roleForm">
+                    <div class="form-group">
+                        <label for="roleName">Role Name</label>
+                        <input type="text" id="roleName" required placeholder="e.g., Front Desk, Manager, Housekeeping">
+                    </div>
+                    <div class="form-group">
+                        <label for="roleDescription">Description</label>
+                        <textarea id="roleDescription" placeholder="Describe this role's purpose"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Page Access Permissions</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="page_admin" value="admin.html" checked>
+                                <label for="page_admin">Dashboard</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="page_inventory" value="inventory.html">
+                                <label for="page_inventory">Inventory</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="page_foodmenu" value="food-menu.html">
+                                <label for="page_foodmenu">Food Menu</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="page_orders" value="active-orders.html">
+                                <label for="page_orders">Active Orders</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="page_reports" value="reports.html">
+                                <label for="page_reports">Reports</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="page_employee" value="employee-management.html">
+                                <label for="page_employee">Employee</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="page_usermgmt" value="user-management.html">
+                                <label for="page_usermgmt">User Management</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Role</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Create User</h2>
+                <form id="userForm">
+                    <div class="form-group">
+                        <label for="userEmail">Email</label>
+                        <input type="email" id="userEmail" required placeholder="user@tagboanan.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="userFullName">Full Name</label>
+                        <input type="text" id="userFullName" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="userPassword">Password</label>
+                        <input type="password" id="userPassword" required placeholder="••••••••">
+                    </div>
+                    <div class="form-group">
+                        <label for="userRole">Role</label>
+                        <select id="userRole" required>
+                            <option value="">Select a role</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="list-section">
+            <div class="list-header">
+                <h2>Roles</h2>
+            </div>
+            <div id="rolesTableContainer"></div>
+        </div>
+
+        <div class="list-section">
+            <div class="list-header">
+                <h2>Users</h2>
+            </div>
+            <div id="usersTableContainer"></div>
+        </div>
+        </div>
+    </main>
+
+    <script>
+        const PAGES = [
+            { id: 'admin.html', name: 'Dashboard' },
+            { id: 'inventory.html', name: 'Inventory' },
+            { id: 'food-menu.html', name: 'Food Menu' },
+            { id: 'active-orders.html', name: 'Active Orders' },
+            { id: 'reports.html', name: 'Reports' },
+            { id: 'employee-management.html', name: 'Employee' },
+            { id: 'user-management.html', name: 'User Management' }
+        ];
+
+        async function loadRoles() {
+            try {
+                const { data, error } = await window.supabaseClient
+                    .from('roles')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                return data;
+            } catch (err) {
+                console.error('Error loading roles:', err);
+                return [];
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const { data, error } = await window.supabaseClient
+                    .from('users')
+                    .select('*, roles(name)')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                return data;
+            } catch (err) {
+                console.error('Error loading users:', err);
+                return [];
+            }
+        }
+
+        async function loadRolePermissions(roleId) {
+            try {
+                const { data, error } = await window.supabaseClient
+                    .from('role_permissions')
+                    .select('*')
+                    .eq('role_id', roleId);
+                
+                if (error) throw error;
+                return data;
+            } catch (err) {
+                console.error('Error loading permissions:', err);
+                return [];
+            }
+        }
+
+        function renderRolesTable(roles) {
+            const container = document.getElementById('rolesTableContainer');
+            
+            if (roles.length === 0) {
+                container.innerHTML = '<div class="empty-state">No roles created yet</div>';
+                return;
+            }
+
+            let html = '<table class="data-table"><thead><tr><th>Role Name</th><th>Description</th><th>Pages</th><th>Actions</th></tr></thead><tbody>';
+            
+            roles.forEach(role => {
+                const pageCount = role.description || 'No description';
+                html += `
+                    <tr>
+                        <td><strong>${role.name}</strong></td>
+                        <td>${role.description || '-'}</td>
+                        <td><span class="badge badge-role">View Permissions</span></td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="action-btn delete" onclick="deleteRole('${role.id}')">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function renderUsersTable(users) {
+            const container = document.getElementById('usersTableContainer');
+            
+            if (users.length === 0) {
+                container.innerHTML = '<div class="empty-state">No users created yet</div>';
+                return;
+            }
+
+            let html = '<table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead><tbody>';
+            
+            users.forEach(user => {
+                const roleName = user.roles ? user.roles.name : 'No Role';
+                html += `
+                    <tr>
+                        <td><strong>${user.full_name}</strong></td>
+                        <td>${user.email}</td>
+                        <td><span class="badge badge-role">${roleName}</span></td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="action-btn delete" onclick="deleteUser('${user.id}')">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        async function populateRoleSelect() {
+            const roles = await loadRoles();
+            const select = document.getElementById('userRole');
+            
+            select.innerHTML = '<option value="">Select a role</option>';
+            roles.forEach(role => {
+                select.innerHTML += `<option value="${role.id}">${role.name}</option>`;
+            });
+        }
+
+        async function createRole(name, description, permissions) {
+            try {
+                const { data: roleData, error: roleError } = await window.supabaseClient
+                    .from('roles')
+                    .insert({ name, description })
+                    .select()
+                    .single();
+                
+                if (roleError) throw roleError;
+
+                const permissionInserts = permissions.map(page => ({
+                    role_id: roleData.id,
+                    page_name: page,
+                    can_access: true
+                }));
+
+                const { error: permError } = await window.supabaseClient
+                    .from('role_permissions')
+                    .insert(permissionInserts);
+                
+                if (permError) throw permError;
+
+                return roleData;
+            } catch (err) {
+                console.error('Error creating role:', err);
+                throw err;
+            }
+        }
+
+        async function createUser(email, fullName, password, roleId) {
+            try {
+                const { data, error } = await window.supabaseClient
+                    .from('users')
+                    .insert({
+                        email,
+                        full_name: fullName,
+                        password_hash: password,
+                        role_id: roleId
+                    })
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                return data;
+            } catch (err) {
+                console.error('Error creating user:', err);
+                throw err;
+            }
+        }
+
+        async function deleteRole(roleId) {
+            if (!confirm('Are you sure you want to delete this role?')) return;
+            
+            try {
+                const { error } = await window.supabaseClient
+                    .from('roles')
+                    .delete()
+                    .eq('id', roleId);
+                
+                if (error) throw error;
+                refreshData();
+            } catch (err) {
+                console.error('Error deleting role:', err);
+                alert('Failed to delete role');
+            }
+        }
+
+        async function deleteUser(userId) {
+            if (!confirm('Are you sure you want to delete this user?')) return;
+            
+            try {
+                const { error } = await window.supabaseClient
+                    .from('users')
+                    .delete()
+                    .eq('id', userId);
+                
+                if (error) throw error;
+                refreshData();
+            } catch (err) {
+                console.error('Error deleting user:', err);
+                alert('Failed to delete user');
+            }
+        }
+
+        async function refreshData() {
+            const roles = await loadRoles();
+            const users = await loadUsers();
+            renderRolesTable(roles);
+            renderUsersTable(users);
+            populateRoleSelect();
+        }
+
+        document.getElementById('roleForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('roleName').value;
+            const description = document.getElementById('roleDescription').value;
+            const permissions = [];
+            
+            PAGES.forEach(page => {
+                const checkbox = document.getElementById(`page_${page.id.replace('.html', '').replace('-', '')}`);
+                if (checkbox && checkbox.checked) {
+                    permissions.push(page.id);
+                }
+            });
+
+            try {
+                await createRole(name, description, permissions);
+                document.getElementById('roleForm').reset();
+                refreshData();
+                alert('Role created successfully!');
+            } catch (err) {
+                alert('Failed to create role: ' + err.message);
+            }
+        });
+
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('userEmail').value;
+            const fullName = document.getElementById('userFullName').value;
+            const password = document.getElementById('userPassword').value;
+            const roleId = document.getElementById('userRole').value;
+
+            try {
+                await createUser(email, fullName, password, roleId);
+                document.getElementById('userForm').reset();
+                refreshData();
+                alert('User created successfully!');
+            } catch (err) {
+                alert('Failed to create user: ' + err.message);
+            }
+        });
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await refreshData();
+        });
+    </script>
+</body>
+</html>
