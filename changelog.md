@@ -1,5 +1,69 @@
 # Changelog
 
+## 2026-05-03
+
+### Mobile Header Design Rollout
+
+- Updated admin pages to use new mobile header design with burger menu animation
+- Replaced old sidebar-toggle button with new mobile header structure across all pages
+- Added tablet toggle button for sidebar expansion on tablet devices
+- Updated toggleSidebar function to handle burger menu animation with active state
+- Applied changes to: inventory.html, food-menu.html, active-orders.html, reports.html, employee-management.html
+- Note: user-management.html already had the new mobile header structure, only toggleSidebar function was updated
+
+### Changes Made
+
+- **Mobile Header Structure**: Added `.admin-header-mobile` with burger menu, logo, and user avatar
+- **Tablet Toggle Button**: Added `.sidebar-toggle-tablet` for sidebar expansion on tablets
+- **Burger Menu Animation**: Updated toggleSidebar to toggle `.active` class on burger menu
+- **Sidebar State Change**: Changed sidebar class toggle from `active` to `open` for consistency
+
+### Notes for Junior Developers
+
+- All admin pages now use consistent mobile header design
+- Burger menu uses CSS transforms for animation (handled by `.active` class)
+- ToggleSidebar function now handles both sidebar and burger menu state
+- Mobile header includes quick logout via user avatar
+- Tablet mode uses dedicated toggle button separate from mobile burger menu
+
+## 2026-05-02 (Part 3)
+
+### Mobile & Tablet Responsive Improvements
+
+- Fixed broken mobile layout with proper header and burger menu implementation
+- Added dedicated mobile header with logo and hamburger menu button
+- Implemented tablet mode with collapsible sidebar (70px collapsed, 260px expanded)
+- Added tablet toggle button for sidebar expansion
+- Improved responsive breakpoints: Desktop (1025px+), Tablet (768-1024px), Mobile (<768px)
+- Added smooth burger menu animation with active state
+- Updated main content padding to account for mobile header height
+- Added mobile user avatar in header for quick logout access
+
+### Responsive Breakpoints
+
+- **Desktop (1025px+)**: Full 260px sidebar always visible
+- **Tablet (768-1024px)**: Collapsed 70px sidebar with toggle button to expand
+- **Mobile (<768px)**: Hidden drawer with fixed header (64px) and burger menu
+- **Small Mobile (<480px)**: Optimized spacing and font sizes
+
+### Layout Improvements
+
+- Mobile header: Fixed 64px height with logo, burger menu, user avatar
+- Tablet toggle: Floating button that moves with sidebar expansion
+- Sidebar positioning: Adjusts for mobile header (starts below header on mobile)
+- Overlay: Proper z-index layering for mobile drawer
+- Content padding: Accounts for mobile header height on small screens
+
+### Notes for Junior Developers
+
+- Mobile header uses `.admin-header-mobile` class (hidden on desktop)
+- Burger menu animates with `.active` class (transforms to X)
+- Tablet mode uses `.sidebar-toggle-tablet` button for sidebar expansion
+- Main content uses `.admin-page-header` instead of `.admin-header`
+- Mobile header height variable: `--header-height: 64px`
+- Sidebar adjusts position on mobile: `top: var(--header-height)`
+- Burger menu animation handled via CSS transforms
+
 ## 2026-05-02 (Part 2)
 
 ### Sidebar Navigation Layout

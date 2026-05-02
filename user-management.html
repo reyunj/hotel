@@ -221,15 +221,39 @@
                 padding: 6rem 1.5rem 3rem;
             }
         }
+
+        .logo-img {
+            height: 32px;
+            width: auto;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
-    <!-- Sidebar Toggle (Mobile) -->
-    <button class="sidebar-toggle" onclick="toggleSidebar()">
+    <!-- Mobile/Tablet Header -->
+    <header class="admin-header-mobile">
+        <div class="header-mobile-left">
+            <button class="burger-menu" onclick="toggleSidebar()" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a href="admin.html" class="header-mobile-logo">
+                <img src="hotelLogo.jpg" alt="Tagboanan Beach Resort" class="logo-img">
+                <span>Tagboanan Admin</span>
+            </a>
+        </div>
+        <div class="header-mobile-right">
+            <div class="mobile-user-avatar" onclick="handleLogout(event)" title="Logout">👤</div>
+        </div>
+    </header>
+
+    <!-- Tablet Toggle Button -->
+    <button class="sidebar-toggle-tablet" onclick="toggleSidebar()" aria-label="Toggle sidebar">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M3 5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5ZM5 5V19H19V5H5Z" fill="#1e293b"/>
         </svg>
-        <span>Menu</span>
     </button>
 
     <!-- Sidebar Overlay (Mobile) -->
@@ -239,7 +263,7 @@
     <aside class="admin-sidebar" id="sidebar">
         <div class="sidebar-header">
             <a href="admin.html" class="sidebar-logo">
-                <span>🏨</span>
+                <img src="hotelLogo.jpg" alt="Tagboanan Beach Resort" class="logo-img">
                 <span>Tagboanan Admin</span>
             </a>
         </div>
@@ -295,7 +319,7 @@
     <!-- Main Content -->
     <main class="admin-main">
         <div class="main-content">
-        <div class="header">
+        <div class="admin-page-header">
             <h1>User Management</h1>
             <p>Create roles, assign permissions, and manage user access</p>
         </div>
@@ -660,8 +684,12 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
-            sidebar.classList.toggle('active');
+            const burgerMenu = document.querySelector('.burger-menu');
+            sidebar.classList.toggle('open');
             overlay.classList.toggle('active');
+            if (burgerMenu) {
+                burgerMenu.classList.toggle('active');
+            }
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
