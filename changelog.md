@@ -8,6 +8,8 @@
 - Replaced old sidebar-toggle button with new mobile header structure across all pages
 - Added tablet toggle button for sidebar expansion on tablet devices
 - Updated toggleSidebar function to handle burger menu animation with active state
+- Fixed mobile UX: Removed accidental logout trigger from mobile user avatar
+- Mobile avatar now serves as visual indicator only (logout remains in sidebar footer)
 - Applied changes to: inventory.html, food-menu.html, active-orders.html, reports.html, employee-management.html
 - Note: user-management.html already had the new mobile header structure, only toggleSidebar function was updated
 
