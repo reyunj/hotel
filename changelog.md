@@ -85,6 +85,7 @@
 ### Database Update Required
 
 Run `update-food-menu.sql` in Supabase SQL Editor to:
+
 1. Check current menu items (SELECT query included)
 2. Remove duplicate items (DELETE queries - modify IDs as needed)
 3. Add new menu items (INSERT statements included)
@@ -171,7 +172,6 @@ Run `update-food-menu.sql` in Supabase SQL Editor to:
 - Orders automatically tagged with room number from URL parameter
 - Active orders already displays room info - no changes needed there
 - QR codes use high error correction for reliability with printing/scanning
-
 
 ### Mobile Header Design Rollout
 
@@ -445,3 +445,11 @@ Run `update-food-menu.sql` in Supabase SQL Editor to:
 - `active-orders.html` uses static JavaScript data to simulate the kitchen workflow and staff reference view.
 - `reports.html` uses static report datasets and client-side calculations so you can prototype financial monitoring before connecting to a backend.
 - `employee-management.html` keeps HR/payroll reference concerns separate from operations pages, making the admin suite easier to extend later.
+
+## 2026-05-03
+
+### Access Control Patch
+
+- Made `access-control.js` opt-in through `window.REAL_ROLE_ACCESS_CONTROL === true`.
+- Demo/admin pages now stay accessible by default when real role data is not configured.
+- The permission alert and nav filtering only run when real role access control is explicitly enabled.
