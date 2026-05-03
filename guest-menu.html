@@ -207,6 +207,17 @@
             cursor: not-allowed;
         }
 
+        .add-to-cart-btn.added {
+            background: var(--success);
+            animation: buttonPulse 0.3s ease;
+        }
+
+        @keyframes buttonPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         .cart-fab {
             position: fixed;
             bottom: 2rem;
@@ -523,7 +534,7 @@
                                 ${isAvailable ? 'Available' : 'Currently Unavailable'}
                             </span>
                             ${isAvailable ? `
-                                <button class="add-to-cart-btn" onclick="addToCart(${item.id})" style="margin-top: 1rem;">
+                                <button class="add-to-cart-btn" onclick="addToCart(${item.id}, this)" style="margin-top: 1rem;">
                                     Add to Order
                                 </button>
                             ` : ''}
@@ -538,7 +549,7 @@
         }
 
         // Add item to cart
-        function addToCart(itemId) {
+        function addToCart(itemId, button) {
             const item = menuItems.find(i => i.id === itemId);
             if (!item) return;
 
@@ -550,6 +561,20 @@
             }
 
             updateCartCount();
+
+            // Animate button
+            if (button) {
+                const originalText = button.textContent;
+                button.textContent = '✓ Added!';
+                button.classList.add('added');
+                button.disabled = true;
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('added');
+                    button.disabled = false;
+                }, 1000);
+            }
         }
 
         // Update cart count display

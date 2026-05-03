@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-05-03 (Part 7)
+
+### Guest Menu Button Animation
+
+- Added visual feedback animation when "Add to Order" button is clicked
+- Button changes to green with "✓ Added!" text for 1 second
+- Includes small scale pulse animation (1.05x scale)
+- Button temporarily disabled during animation to prevent double-clicks
+- Improves UX by providing clear confirmation that item was added to cart
+
+### Animation Details
+
+- **Color change:** Blue → Green (success color)
+- **Text change:** "Add to Order" → "✓ Added!"
+- **Animation:** Scale pulse (1 → 1.05 → 1) over 0.3s
+- **Duration:** 1 second feedback, then reverts to original state
+- **Button state:** Disabled during animation to prevent spam
+
 ## 2026-05-03 (Part 6)
 
 ### Menu Images Added
