@@ -1,6 +1,159 @@
 # Changelog
 
-## 2026-05-03
+## 2026-05-03 (Part 6)
+
+### Menu Images Added
+
+- Added Unsplash image URLs to all 21 new menu items
+- Images match food categories and Filipino dishes
+- All menu items now have valid image URLs
+- Fixed "No image available" issue for new items
+
+## 2026-05-03 (Part 5)
+
+### Database Menu Update Executed
+
+- Removed 4 duplicate menu items (IDs 10, 11, 12, 13)
+- Added 21 new Filipino menu items via Supabase MCP
+- Categories: Main Course (9), Dessert (3), Beverage (4), Side Dish (1), Appetizer (4)
+- Total menu items: 21 (original 8 - 4 duplicates + 21 new = 25 items)
+
+### Items Added
+
+**Main Course:** Adobo (350), Sinigang na Baboy (380), Bicol Express (320), Pancit Canton (280), Liempo (420), Sizzling Sisig (380), Kare-Kare (450), Pinakbet (320), Lechon Kawali (400)
+**Dessert:** Biko (180), Leche Flan (150), Turon (120)
+**Beverage:** Buko Pandan (180), Calamansi Juice (120), Soda (80), Coffee (150)
+**Side Dish:** Fried Rice (120)
+**Appetizer:** Lumpiang Shanghai (180), Chicharon (150), Ensaladang Talong (140), Camote Cue (130)
+
+### SQL Operations
+
+- DELETE: Removed duplicates (Mango Shake x2, Halo-Halo x2, Chicken Inasal x2, Grilled Pork BBQ x2)
+- INSERT: Added 21 new items with empty images, availability=true
+- Skipped: Halo-Halo, Iced Tea (already exist in database)
+
+## 2026-05-03 (Part 4)
+
+### UI Fixes
+
+- Fixed QR Menu button spacing in room cards (buttons were stuck together)
+- Added proper gap between action buttons using flexbox layout
+- Changed button width from 100% to flex: 1 for even spacing
+
+## 2026-05-03 (Part 3)
+
+### Food Menu Improvements
+
+- Created SQL script to remove duplicate menu items (chicken inasal, mango shake)
+- Added 20+ new Filipino menu items across multiple categories
+- Updated guest-menu layout to 2-column grid for better space utilization
+- Mobile-responsive: Single column on mobile, 2 columns on tablet/desktop
+
+### New Menu Items Added
+
+**Main Course:** Adobo, Sinigang na Baboy, Bicol Express, Pancit Canton, Liempo, Sizzling Sisig, Kare-Kare, Pinakbet, Lechon Kawali
+**Dessert:** Biko, Halo-Halo, Leche Flan, Turon
+**Beverage:** Buko Pandan, Calamansi Juice, Iced Tea, Soda, Coffee
+**Side Dish:** Fried Rice
+**Appetizer:** Lumpiang Shanghai, Chicharon, Ensaladang Talong, Camote Cue
+
+### Guest Menu Layout Changes
+
+- **Desktop/Tablet**: 2-column grid layout for menu items
+- **Mobile**: Single column for better mobile experience
+- **Category grouping**: Items organized by food category
+- **Responsive breakpoint**: 768px switches between 1 and 2 columns
+
+### Database Update Required
+
+Run `update-food-menu.sql` in Supabase SQL Editor to:
+1. Check current menu items (SELECT query included)
+2. Remove duplicate items (DELETE queries - modify IDs as needed)
+3. Add new menu items (INSERT statements included)
+
+### Files Modified
+
+- **guest-menu.html**: Added menu-grid CSS layout, updated renderMenu function
+- **update-food-menu.sql**: Created SQL script for menu management
+
+### Notes for Junior Developers
+
+- Run the SELECT query first to identify duplicate item IDs
+- Modify DELETE statements with actual UUIDs from your database
+- New items added without images (can be added later via admin)
+- All new items set as available (availability = true)
+- Guest menu uses CSS Grid for responsive 2-column layout
+- Mobile breakpoint at 768px switches to single column
+
+## 2026-05-03 (Part 2)
+
+### QR Code-Based Room Service Ordering System
+
+- Implemented QR code generation for each room in admin dashboard
+- Added "📱 QR Menu" button to all room cards for easy QR code access
+- Created guest-facing menu page (guest-menu.html) with room-specific ordering
+- Integrated room parameter in food ordering system via QR code URLs
+- Implemented availability filtering on guest menu (unavailable items grayed out)
+- Added shopping cart functionality to guest menu with real-time updates
+- Room information automatically tagged to all orders from QR scans
+- Active orders page already displays room information (existing feature)
+
+### QR Code Features
+
+- **Room-specific QR codes**: Each room has unique QR code pointing to room menu
+- **Download functionality**: QR codes can be downloaded as PNG for printing
+- **Direct link sharing**: URL displayed for alternative access methods
+- **Modal display**: QR codes shown in clean modal with room information
+- **High error correction**: Uses QR code error correction level H for reliability
+
+### Guest Menu Features
+
+- **Mobile-first design**: Optimized for guest mobile devices
+- **Room identification**: Header displays room number from QR parameter
+- **Availability filtering**: Shows only available items, grays out unavailable
+- **Category organization**: Menu items grouped by food category
+- **Shopping cart**: Add items, adjust quantities, view total
+- **Guest information**: Collects guest name and special instructions
+- **Direct room tagging**: Orders automatically associated with room number
+
+### Ordering Flow
+
+1. Admin generates QR code for specific room
+2. QR code printed and placed in room
+3. Guest scans QR code → opens guest-menu.html?room=ROOM-101
+4. Guest browses menu, adds available items to cart
+5. Guest enters name and places order
+6. Order saved to Supabase with room_number automatically tagged
+7. Kitchen sees order with room information in active orders page
+
+### Database Integration
+
+- **food_orders table**: Already has room_number field (existing schema)
+- **food_menu table**: Uses availability field for filtering
+- **guest-menu.html**: Reads from food_menu, writes to food_orders + food_order_items
+- **active-orders.html**: Already displays room information (existing feature)
+
+### Files Added
+
+- **guest-menu.html**: Complete guest-facing ordering system
+- **QR code library**: Added qrcode.js CDN to admin.html
+
+### Files Modified
+
+- **admin.html**: Added QR code generation, modal, and download functionality
+- **Room cards**: Added "📱 QR Menu" button to all room cards
+
+### Notes for Junior Developers
+
+- QR codes point to: `guest-menu.html?room={roomNumber}`
+- Guest menu uses Supabase client (same configuration as admin)
+- Availability field in food_menu: true/false or "available"/"unavailable"
+- Room parameter passed via URL: `new URLSearchParams(window.location.search)`
+- Shopping cart stored in JavaScript memory (per session)
+- Orders automatically tagged with room number from URL parameter
+- Active orders already displays room info - no changes needed there
+- QR codes use high error correction for reliability with printing/scanning
+
 
 ### Mobile Header Design Rollout
 
