@@ -53,7 +53,7 @@
         }
 
         .stat-card {
-            background: white;
+            background: var(--bg-card);
             padding: 1.5rem;
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
@@ -81,7 +81,7 @@
         }
 
         .card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             border: 1px solid var(--border);
@@ -123,7 +123,7 @@
             padding: 0.75rem 1rem;
             font: inherit;
             color: var(--text-dark);
-            background: #fff;
+            background: var(--bg-card);
         }
 
         .form-group textarea {
@@ -148,11 +148,11 @@
         }
 
         .helper-box {
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
+            background: var(--bg-hover);
+            border: 1px solid var(--primary);
             border-radius: 8px;
             padding: 0.75rem 1rem;
-            color: #1d4ed8;
+            color: var(--primary);
             font-size: 0.85rem;
             margin-bottom: 1rem;
         }
@@ -170,7 +170,7 @@
         }
 
         .food-card {
-            background: white;
+            background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
             overflow: hidden;
@@ -230,13 +230,13 @@
         }
 
         .food-card .availability.available {
-            background: #dcfce7;
-            color: #166534;
+            background: var(--success);
+            color: white;
         }
 
         .food-card .availability.unavailable {
-            background: #fee2e2;
-            color: #991b1b;
+            background: var(--danger);
+            color: white;
         }
 
         .food-card .description {
@@ -250,7 +250,7 @@
             width: 100%;
             padding: 0.625rem 1rem;
             border: 1px solid var(--border);
-            background: white;
+            background: var(--bg-card);
             color: var(--text-dark);
             border-radius: 8px;
             font-size: 0.85rem;
