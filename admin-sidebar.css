@@ -40,6 +40,12 @@
     text-decoration: none;
 }
 
+.sidebar-logo-img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
 .sidebar-logo svg {
     width: 32px;
     height: 32px;
